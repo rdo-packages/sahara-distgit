@@ -4,6 +4,10 @@
 %{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
+%endif
+
 # This variable is defined to help with the transition from version 2014.1.b3
 # to 2014.1. With the package version set to 2014.1, the Obsoletes directive
 # will produce self-obsoletion warnings related to 2014.1 < 2014.1.b3 for some
@@ -14,7 +18,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       1%{?dist}
+Release:       3%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -22,6 +26,8 @@ License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
+Source2:       openstack-sahara-api.init
+Patch0:        sqlalchemy0.7-magic.patch
 BuildArch:     noarch
 
 BuildRequires: python2-devel
@@ -29,8 +35,15 @@ BuildRequires: python-setuptools
 BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
 BuildRequires: python-pbr >= 0.5.19
+
+%if 0%{?rhel} && 0%{?rhel} <= 6
+# Needed by sqlalchemy0.7-magic.patch
+BuildRequires: python-sqlalchemy0.7
+BuildRequires: python-paste-deploy1.5
+%else
 # Need systemd-units for _unitdir macro
 BuildRequires: systemd-units
+%endif
 
 Requires: python-alembic
 #?Babel>=1.3?
@@ -49,13 +62,21 @@ Requires: python-swiftclient
 Requires: python-neutronclient
 Requires: python-six >= 1.4.1
 Requires: python-stevedore >= 0.14
-Requires: python-sqlalchemy
 Requires: python-webob
 
+%if 0%{?rhel} && 0%{?rhel} <= 6
+Requires: python-sqlalchemy0.7
+Requires(post):   chkconfig
+Requires(preun):  initscripts
+Requires(postun): chkconfig
+Requires(pre):    shadow-utils
+%else
+Requires: python-sqlalchemy
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 Requires(pre):    shadow-utils
+%endif
 
 
 %package doc
@@ -77,6 +98,11 @@ install, use, and manage the Sahara infrastructure.
 
 %prep
 %setup -q -n sahara-%{tmp_upstream_version}
+
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%patch0
+%endif
+
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
 # The data_files glob appears broken in pbr 0.5.19, so be explicit
@@ -98,14 +124,25 @@ export PYTHONPATH=$PWD:${PYTHONPATH}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
 # make doc build compatible with python-oslo-sphinx RPM
 sed -i 's/oslosphinx/oslo.sphinx/' doc/source/conf.py
+
+%if 0%{?rhel} && 0%{?rhel} <= 6
+sphinx-1.0-build doc/source html
+%else
 sphinx-build doc/source html
+%endif
+
 rm -rf html/.{doctrees,buildinfo}
 
 
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
+%if 0%{?rhel} && 0%{?rhel} <= 6
+install -d -m 755 %{buildroot}%{_localstatedir}/run/sahara
+install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/openstack-sahara-api
+%else
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-api.service
+%endif
 
 HOME=%{_sharedstatedir}/sahara
 install -d -m 700 %{buildroot}$HOME
@@ -149,26 +186,51 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
+%if 0%{?rhel} && 0%{?rhel} <= 6
+/sbin/chkconfig --add openstack-sahara-api
+%else
 %systemd_post openstack-sahara-api.service
+%endif
 
 
 %preun
+%if 0%{?rhel} && 0%{?rhel} <= 6
+if [ $1 -eq 0 ] ; then
+   /sbin/service openstack-sahara-api stop >/dev/null 2>&1
+   /sbin/chkconfig --del openstack-sahara-api
+fi
+%else
 %systemd_preun openstack-sahara-api.service
+%endif
 
 
 %postun
+%if 0%{?rhel} && 0%{?rhel} <= 6
+if [ $1 -ge 1 ] ; then
+   # Package upgrade, not uninstall
+   /sbin/service openstack-sahara-api condrestart > /dev/null 2>&1 || :
+fi
+%else
 %systemd_postun_with_restart openstack-sahara-api.service
+%endif
 
 
 %files
 %doc README.rst LICENSE
+
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%dir %attr(0755, sahara, root) %{_localstatedir}/run/sahara
+%{_initrddir}/openstack-sahara-api
+%else
+%{_unitdir}/openstack-sahara-api.service
+%endif
+
 %dir %{_sysconfdir}/sahara
 # Note: this file is not readable because it holds auth credentials
 %config(noreplace) %attr(-, root, sahara) %{_sysconfdir}/sahara/sahara.conf
 %{_bindir}/sahara-api
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
-%{_unitdir}/openstack-sahara-api.service
 %dir %attr(-, sahara, sahara) %{_sharedstatedir}/sahara
 # Note: permissions on sahara's home are intentially 0700
 %dir %{_datadir}/sahara
@@ -183,6 +245,12 @@ exit 0
 
 
 %changelog
+* Thu Apr 24 2014 Michael McCune <mimccune@redhat> - 2014.1.0-3
+- merging in el6 spec, with conditionals
+
+* Thu Apr 24 2014 Michael McCune <mimccune@redhat> - 2014.1.0-2
+- adding _pkgdocdir macro for rhel<=7
+
 * Tue Apr 22 2014 Michael McCune <mimccune@redhat> - 2014.1.0-1
 - 2014.1 release
 

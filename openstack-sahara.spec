@@ -4,6 +4,9 @@
 %global have_rhel6 0
 %endif
 
+%global sahara_user sahara
+%global sahara_group %{sahara_user}
+
 %if %{have_rhel6}
 %{!?__python2: %global __python2 /usr/bin/python2}
 %{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
@@ -24,7 +27,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       5%{?dist}
+Release:       6%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -185,8 +188,8 @@ cp -rp sahara/db/migration/alembic_migrations %{buildroot}%{python_sitelib}/saha
 
 %pre
 # Origin: http://fedoraproject.org/wiki/Packaging:UsersAndGroups#Dynamic_allocation
-USERNAME=sahara
-GROUPNAME=$USERNAME
+USERNAME=%{sahara_user}
+GROUPNAME=%{sahara_group}
 HOMEDIR=%{_sharedstatedir}/sahara
 getent group $GROUPNAME >/dev/null || groupadd -r $GROUPNAME
 getent passwd $USERNAME >/dev/null || \
@@ -197,6 +200,8 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
+chown %{sahara_user}:%{sahara_group} %{_localstatedir}/log/sahara
+
 %if %{have_rhel6}
 /sbin/chkconfig --add openstack-sahara-api
 %else
@@ -256,6 +261,10 @@ fi
 
 
 %changelog
+* Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-6
+- Adding sahara user ownership to log dir
+- Creating local variables for sahara user and group
+
 * Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-5
 - Adding alembic migration files
 

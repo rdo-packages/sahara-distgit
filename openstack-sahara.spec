@@ -24,7 +24,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       4%{?dist}
+Release:       5%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -169,6 +169,11 @@ mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 mkdir -p %{buildroot}/%{_pkgdocdir}
 cp -rp html %{buildroot}/%{_pkgdocdir}
 
+# Copy the migrations
+# these files do not get installed by setup.py because they are outside the
+# package definitions, but they are needed by sahara-api.
+cp -rp sahara/db/migration/alembic_migrations %{buildroot}%{python_sitelib}/sahara/db/migration/
+
 
 %check
 # Building on koji with virtualenv requires test-requirements.txt and this
@@ -251,6 +256,9 @@ fi
 
 
 %changelog
+* Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-5
+- Adding alembic migration files
+
 * Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-4
 - Correcting bug with rhel6 init script
 - Adding local variable for rhel6 tests

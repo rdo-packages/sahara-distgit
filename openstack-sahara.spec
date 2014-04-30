@@ -1,4 +1,10 @@
 %if 0%{?rhel} && 0%{?rhel} <= 6
+%global have_rhel6 1
+%else
+%global have_rhel6 0
+%endif
+
+%if %{have_rhel6}
 %{!?__python2: %global __python2 /usr/bin/python2}
 %{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -18,7 +24,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       3%{?dist}
+Release:       4%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -36,7 +42,7 @@ BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
 BuildRequires: python-pbr >= 0.5.19
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 # Needed by sqlalchemy0.7-magic.patch
 BuildRequires: python-sqlalchemy0.7
 BuildRequires: python-paste-deploy1.5
@@ -64,7 +70,7 @@ Requires: python-six >= 1.4.1
 Requires: python-stevedore >= 0.14
 Requires: python-webob
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 Requires: python-sqlalchemy0.7
 Requires(post):   chkconfig
 Requires(preun):  initscripts
@@ -99,7 +105,7 @@ install, use, and manage the Sahara infrastructure.
 %prep
 %setup -q -n sahara-%{tmp_upstream_version}
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 %patch0
 %endif
 
@@ -125,7 +131,7 @@ export PYTHONPATH=$PWD:${PYTHONPATH}
 # make doc build compatible with python-oslo-sphinx RPM
 sed -i 's/oslosphinx/oslo.sphinx/' doc/source/conf.py
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 sphinx-1.0-build doc/source html
 %else
 sphinx-build doc/source html
@@ -137,9 +143,9 @@ rm -rf html/.{doctrees,buildinfo}
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 install -d -m 755 %{buildroot}%{_localstatedir}/run/sahara
-install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/openstack-sahara-api
+install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-sahara-api
 %else
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-api.service
 %endif
@@ -186,7 +192,7 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 /sbin/chkconfig --add openstack-sahara-api
 %else
 %systemd_post openstack-sahara-api.service
@@ -194,7 +200,7 @@ exit 0
 
 
 %preun
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 if [ $1 -eq 0 ] ; then
    /sbin/service openstack-sahara-api stop >/dev/null 2>&1
    /sbin/chkconfig --del openstack-sahara-api
@@ -205,7 +211,7 @@ fi
 
 
 %postun
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 if [ $1 -ge 1 ] ; then
    # Package upgrade, not uninstall
    /sbin/service openstack-sahara-api condrestart > /dev/null 2>&1 || :
@@ -218,7 +224,7 @@ fi
 %files
 %doc README.rst LICENSE
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
+%if %{have_rhel6}
 %dir %attr(0755, sahara, root) %{_localstatedir}/run/sahara
 %{_initrddir}/openstack-sahara-api
 %else
@@ -245,6 +251,10 @@ fi
 
 
 %changelog
+* Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-4
+- Correcting bug with rhel6 init script
+- Adding local variable for rhel6 tests
+
 * Thu Apr 24 2014 Michael McCune <mimccune@redhat> - 2014.1.0-3
 - merging in el6 spec, with conditionals
 

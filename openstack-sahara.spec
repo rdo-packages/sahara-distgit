@@ -1,7 +1,9 @@
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
+%global want_systemd 0
 %else
 %global have_rhel6 0
+%global want_systemd 1
 %endif
 
 %global sahara_user sahara
@@ -27,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       7%{?dist}
+Release:       8%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -44,10 +46,7 @@ BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
 BuildRequires: python-pbr >= 0.5.19
 
-%if %{have_rhel6}
-BuildRequires: python-sqlalchemy
-BuildRequires: python-paste-deploy1.5
-%else
+%if %{want_systemd}
 # Need systemd-units for _unitdir macro
 BuildRequires: systemd-units
 %endif
@@ -70,20 +69,18 @@ Requires: python-neutronclient
 Requires: python-six >= 1.4.1
 Requires: python-stevedore >= 0.14
 Requires: python-webob
-
-%if %{have_rhel6}
-Requires: python-sqlalchemy0.7
-Requires(post):   chkconfig
-Requires(preun):  initscripts
-Requires(postun): chkconfig
-Requires(pre):    shadow-utils
-%else
 Requires: python-sqlalchemy
+
+%if %{want_systemd}
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-Requires(pre):    shadow-utils
+%else
+Requires(post):   chkconfig
+Requires(preun):  initscripts
+Requires(postun): chkconfig
 %endif
+Requires(pre):    shadow-utils
 
 
 %package doc
@@ -126,24 +123,18 @@ export PYTHONPATH=$PWD:${PYTHONPATH}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
 # make doc build compatible with python-oslo-sphinx RPM
 sed -i 's/oslosphinx/oslo.sphinx/' doc/source/conf.py
-
-%if %{have_rhel6}
-sphinx-1.0-build doc/source html
-%else
 sphinx-build doc/source html
-%endif
-
 rm -rf html/.{doctrees,buildinfo}
 
 
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
-%if %{have_rhel6}
+%if %{want_systemd}
+install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-api.service
+%else
 install -d -m 755 %{buildroot}%{_localstatedir}/run/sahara
 install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-sahara-api
-%else
-install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-api.service
 %endif
 
 HOME=%{_sharedstatedir}/sahara
@@ -167,7 +158,7 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 
 # Copy the migrations
 # these files do not get installed by setup.py because they are outside the
-# package definitions, but they are needed by sahara-api.
+# package definitions, but they are needed by sahara-db-manage.
 cp -rp sahara/db/migration/alembic_migrations %{buildroot}%{python_sitelib}/sahara/db/migration/
 
 
@@ -193,32 +184,32 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
-%if %{have_rhel6}
-/sbin/chkconfig --add openstack-sahara-api
-%else
+%if %{want_systemd}
 %systemd_post openstack-sahara-api.service
+%else
+/sbin/chkconfig --add openstack-sahara-api
 %endif
 
 
 %preun
-%if %{have_rhel6}
+%if %{want_systemd}
+%systemd_preun openstack-sahara-api.service
+%else
 if [ $1 -eq 0 ] ; then
    /sbin/service openstack-sahara-api stop >/dev/null 2>&1
    /sbin/chkconfig --del openstack-sahara-api
 fi
-%else
-%systemd_preun openstack-sahara-api.service
 %endif
 
 
 %postun
-%if %{have_rhel6}
+%if %{want_systemd}
+%systemd_postun_with_restart openstack-sahara-api.service
+%else
 if [ $1 -ge 1 ] ; then
    # Package upgrade, not uninstall
    /sbin/service openstack-sahara-api condrestart > /dev/null 2>&1 || :
 fi
-%else
-%systemd_postun_with_restart openstack-sahara-api.service
 %endif
 
 
@@ -252,6 +243,10 @@ fi
 
 
 %changelog
+* Fri May 02 2014 Michael McCune <mimccune@redhat> - 2014.1.0-8
+- Removing python-sqlalchemy and python-paste-deploy from BuildRequires
+- refactoring the systemd portions
+
 * Fri May 02 2014 Michael McCune <mimccune@redhat> - 2014.1.0-7
 - Changing parallel build require for python-sqlalchemy0.7
 - Removing chmod in post

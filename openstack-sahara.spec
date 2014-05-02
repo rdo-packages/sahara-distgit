@@ -27,7 +27,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       6%{?dist}
+Release:       7%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -36,7 +36,6 @@ URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
-Patch0:        sqlalchemy0.7-magic.patch
 BuildArch:     noarch
 
 BuildRequires: python2-devel
@@ -46,8 +45,7 @@ BuildRequires: python-sphinxcontrib-httpdomain
 BuildRequires: python-pbr >= 0.5.19
 
 %if %{have_rhel6}
-# Needed by sqlalchemy0.7-magic.patch
-BuildRequires: python-sqlalchemy0.7
+BuildRequires: python-sqlalchemy
 BuildRequires: python-paste-deploy1.5
 %else
 # Need systemd-units for _unitdir macro
@@ -108,10 +106,6 @@ install, use, and manage the Sahara infrastructure.
 %prep
 %setup -q -n sahara-%{tmp_upstream_version}
 
-%if %{have_rhel6}
-%patch0
-%endif
-
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
 # The data_files glob appears broken in pbr 0.5.19, so be explicit
@@ -123,7 +117,6 @@ sed -i 1,2d sahara/cli/sahara_subprocess.py
 # set executable on this file to supress rpmlint warnings, it is used as a
 # template to create shell scripts.
 chmod a+x sahara/plugins/vanilla/v2_3_0/resources/post_conf.template
-
 
 
 %build
@@ -200,8 +193,6 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
-chown %{sahara_user}:%{sahara_group} %{_localstatedir}/log/sahara
-
 %if %{have_rhel6}
 /sbin/chkconfig --add openstack-sahara-api
 %else
@@ -235,7 +226,7 @@ fi
 %doc README.rst LICENSE
 
 %if %{have_rhel6}
-%dir %attr(0755, sahara, root) %{_localstatedir}/run/sahara
+%dir %attr(0755, %{sahara_user}, root) %{_localstatedir}/run/sahara
 %{_initrddir}/openstack-sahara-api
 %else
 %{_unitdir}/openstack-sahara-api.service
@@ -243,17 +234,17 @@ fi
 
 %dir %{_sysconfdir}/sahara
 # Note: this file is not readable because it holds auth credentials
-%config(noreplace) %attr(-, root, sahara) %{_sysconfdir}/sahara/sahara.conf
+%config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
 %{_bindir}/sahara-api
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
-%dir %attr(-, sahara, sahara) %{_sharedstatedir}/sahara
+%dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
+%dir %attr(-, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
 # Note: permissions on sahara's home are intentially 0700
 %dir %{_datadir}/sahara
 %{_datadir}/sahara/sahara.conf.sample
 %{python_sitelib}/sahara
 %{python_sitelib}/sahara-%{tmp_upstream_version}-py?.?.egg-info
-%dir %{_localstatedir}/log/sahara
 
 
 %files doc
@@ -261,6 +252,11 @@ fi
 
 
 %changelog
+* Fri May 02 2014 Michael McCune <mimccune@redhat> - 2014.1.0-7
+- Changing parallel build require for python-sqlalchemy0.7
+- Removing chmod in post
+- Replacing user/group in attrs with global variables
+
 * Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-6
 - Adding sahara user ownership to log dir
 - Creating local variables for sahara user and group

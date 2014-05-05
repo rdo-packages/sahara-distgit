@@ -29,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       10%{?dist}
+Release:       11%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -43,6 +43,7 @@ BuildArch:     noarch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
+BuildRequires: python-sphinx >= 1.1.2
 BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
 BuildRequires: python-pbr >= 0.5.19
@@ -248,6 +249,9 @@ fi
 
 
 %changelog
+* Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-11
+- Adding BuildRequire for python-sphinx
+
 * Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-10
 - Removing pbr from Requires
 - changing version and release temp from patch

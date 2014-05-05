@@ -29,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       8%{?dist}
+Release:       10%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -38,6 +38,7 @@ URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
+Patch0001:     0001-remove-runtime-dep-on-python-pbr.patch
 BuildArch:     noarch
 
 BuildRequires: python2-devel
@@ -60,7 +61,6 @@ Requires: python-jsonschema >= 1.3.0
 Requires: python-oslo-config >= 1.2.0
 Requires: python-oslo-messaging
 Requires: python-paramiko >= 1.9.0
-Requires: python-pbr
 Requires: python-cinderclient >= 1.0.5
 Requires: python-keystoneclient >= 0.6.0
 Requires: python-novaclient >= 2.15.0
@@ -102,6 +102,11 @@ install, use, and manage the Sahara infrastructure.
 
 %prep
 %setup -q -n sahara-%{tmp_upstream_version}
+
+%patch0001 -p0
+
+sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
+sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
 
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
@@ -243,6 +248,13 @@ fi
 
 
 %changelog
+* Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-10
+- Removing pbr from Requires
+- changing version and release temp from patch
+
+* Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-9
+- Adding patch to remove runtime pbr requirement
+
 * Fri May 02 2014 Michael McCune <mimccune@redhat> - 2014.1.0-8
 - Removing python-sqlalchemy and python-paste-deploy from BuildRequires
 - refactoring the systemd portions

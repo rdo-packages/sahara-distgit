@@ -38,7 +38,7 @@ URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
-Patch0001:     0001-remove-runtime-dep-on-python-pbr.sahara.patch
+Patch0001:     0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002:     0002-add-migrations-and-hdp-versions-to-manifest.patch
 BuildArch:     noarch
 

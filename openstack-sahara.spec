@@ -29,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       11%{?dist}
+Release:       12%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -38,7 +38,8 @@ URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
-Patch0001:     0001-remove-runtime-dep-on-python-pbr.patch
+Patch0001:     0001-remove-runtime-dep-on-python-pbr.sahara.patch
+Patch0002:     0002-add-migrations-and-hdp-versions-to-manifest.patch
 BuildArch:     noarch
 
 BuildRequires: python2-devel
@@ -105,6 +106,7 @@ install, use, and manage the Sahara infrastructure.
 %setup -q -n sahara-%{tmp_upstream_version}
 
 %patch0001 -p0
+%patch0002 -p0
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
@@ -161,11 +163,6 @@ mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 # Copy built doc files for doc subpackage
 mkdir -p %{buildroot}/%{_pkgdocdir}
 cp -rp html %{buildroot}/%{_pkgdocdir}
-
-# Copy the migrations
-# these files do not get installed by setup.py because they are outside the
-# package definitions, but they are needed by sahara-db-manage.
-cp -rp sahara/db/migration/alembic_migrations %{buildroot}%{python_sitelib}/sahara/db/migration/
 
 
 %check
@@ -249,6 +246,10 @@ fi
 
 
 %changelog
+* Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-12
+- Patching MANIFEST.in for missing hdp plugin resources and alembic migrations
+- Removing the cp for alembic migrations
+
 * Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-11
 - Adding BuildRequire for python-sphinx
 
@@ -273,10 +274,10 @@ fi
 - Creating local variables for sahara user and group
 
 * Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-5
-- Adding alembic migration files
+- Adding alembic migration files, addressing BZ1094757
 
 * Wed Apr 30 2014 Michael McCune <mimccune@redhat> - 2014.1.0-4
-- Correcting bug with rhel6 init script
+- Correcting bug with rhel6 init script, addressing BZ1094755
 - Adding local variable for rhel6 tests
 
 * Thu Apr 24 2014 Michael McCune <mimccune@redhat> - 2014.1.0-3

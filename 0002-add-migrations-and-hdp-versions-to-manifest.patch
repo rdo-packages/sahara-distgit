@@ -1,0 +1,28 @@
+--- MANIFEST.in	2014-04-17 10:02:06.000000000 -0400
++++ MANIFEST.in	2014-05-06 14:28:35.997635457 -0400
+@@ -4,8 +4,10 @@
+ include LICENSE
+ include sahara/db/migration/README
+ include sahara/db/migration/alembic.ini
++include sahara/db/migration/alembic_migrations/env.py
+ include sahara/db/migration/alembic_migrations/script.py.mako
+ include sahara/db/migration/alembic_migrations/versions/README
++include sahara/db/migration/alembic_migrations/versions/*.py
+ 
+ recursive-include sahara/locale *
+ 
+@@ -20,10 +22,10 @@
+ include sahara/plugins/vanilla/v2_3_0/resources/*.sh
+ include sahara/plugins/vanilla/v2_3_0/resources/*.sql
+ include sahara/plugins/vanilla/v2_3_0/resources/*.template
+-include sahara/plugins/hdp/versions/1_3_2/resources/*.template
+-include sahara/plugins/hdp/versions/1_3_2/resources/*.json
+-include sahara/plugins/hdp/versions/2_0/resources/*.template
+-include sahara/plugins/hdp/versions/2_0/resources/*.json
++include sahara/plugins/hdp/versions/version_1_3_2/resources/*.template
++include sahara/plugins/hdp/versions/version_1_3_2/resources/*.json
++include sahara/plugins/hdp/versions/version_2_0/resources/*.template
++include sahara/plugins/hdp/versions/version_2_0/resources/*.json
+ include sahara/resources/*.heat
+ include sahara/service/edp/resources/*.xml
+ include sahara/swift/resources/*.xml

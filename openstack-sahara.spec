@@ -246,7 +246,7 @@ fi
 
 
 %changelog
-* Wed May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-13
+* Wed May 07 2014 Michael McCune <mimccune@redhat> - 2014.1.0-13
 - Adding missing shell scripts to manifest patch
 
 * Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-12

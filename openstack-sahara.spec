@@ -29,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       12%{?dist}
+Release:       13%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -246,6 +246,9 @@ fi
 
 
 %changelog
+* Wed May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-13
+- Adding missing shell scripts to manifest patch
+
 * Mon May 05 2014 Michael McCune <mimccune@redhat> - 2014.1.0-12
 - Patching MANIFEST.in for missing hdp plugin resources and alembic migrations
 - Removing the cp for alembic migrations

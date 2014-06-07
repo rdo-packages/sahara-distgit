@@ -29,7 +29,7 @@
 
 Name:          openstack-sahara
 Version:       2014.1.0
-Release:       13%{?dist}
+Release:       14%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -246,6 +246,9 @@ fi
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2014.1.0-14
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Wed May 07 2014 Michael McCune <mimccune@redhat> - 2014.1.0-13
 - Adding missing shell scripts to manifest patch
 

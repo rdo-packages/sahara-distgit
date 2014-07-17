@@ -1,15 +1,15 @@
-From 0ff3a87a05065456d589465643cb817cac4d0d83 Mon Sep 17 00:00:00 2001
+From 05df127529293acd75cc73373625fff6cfb5a231 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Thu, 17 Jul 2014 12:01:00 +0100
 Subject: [PATCH] reference actual plugins shipped in tarball
 
 Report and analysis from Dalmais Maxence <maxence.dalmais@worldline.com>
 ---
- MANIFEST.in |   12 ++++++++----
- 1 files changed, 8 insertions(+), 4 deletions(-)
+ MANIFEST.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
 diff --git a/MANIFEST.in b/MANIFEST.in
-index dadbd42..6d5538b 100644
+index 20fc1c8..6d5538b 100644
 --- a/MANIFEST.in
 +++ b/MANIFEST.in
 @@ -4,8 +4,10 @@ include ChangeLog
@@ -23,20 +23,3 @@ index dadbd42..6d5538b 100644
  
  recursive-include sahara/locale *
  
-@@ -20,10 +22,12 @@ include sahara/plugins/vanilla/v2_3_0/resources/*.xml
- include sahara/plugins/vanilla/v2_3_0/resources/*.sh
- include sahara/plugins/vanilla/v2_3_0/resources/*.sql
- include sahara/plugins/vanilla/v2_3_0/resources/*.template
--include sahara/plugins/hdp/versions/1_3_2/resources/*.template
--include sahara/plugins/hdp/versions/1_3_2/resources/*.json
--include sahara/plugins/hdp/versions/2_0/resources/*.template
--include sahara/plugins/hdp/versions/2_0/resources/*.json
-+include sahara/plugins/hdp/versions/version_1_3_2/resources/*.template
-+include sahara/plugins/hdp/versions/version_1_3_2/resources/*.json
-+include sahara/plugins/hdp/versions/version_1_3_2/resources/*.sh
-+include sahara/plugins/hdp/versions/version_2_0_6/resources/*.template
-+include sahara/plugins/hdp/versions/version_2_0_6/resources/*.json
-+include sahara/plugins/hdp/versions/version_2_0_6/resources/*.sh
- include sahara/resources/*.heat
- include sahara/service/edp/resources/*.xml
- include sahara/swift/resources/*.xml

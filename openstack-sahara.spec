@@ -20,10 +20,9 @@
 %endif
 
 Name:          openstack-sahara
-Version:       2014.1
-Release:       14%{?dist}
+Version:       2014.1.1
+Release:       1%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
-Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
@@ -33,7 +32,7 @@ Source2:       openstack-sahara-api.init
 BuildArch:     noarch
 
 #
-# patches_base=2014.1
+# patches_base=2014.1.1
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
@@ -242,6 +241,9 @@ fi
 
 
 %changelog
+* Thu Jul 17 2014 Pádraig Brady <pbrady@redhat.com> - 2014.1.1-1
+- Stable icehouse 2014.1.1 rebase
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2014.1.0-14
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 

@@ -1,4 +1,4 @@
-From 55b3ea98f8886d8c2123d0dfacb0d6eaa5c98b81 Mon Sep 17 00:00:00 2001
+From c7ca46c334d070078111e36b7962ec67585cbc66 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Thu, 17 Jul 2014 11:59:16 +0100
 Subject: [PATCH] remove runtime dep on python-pbr

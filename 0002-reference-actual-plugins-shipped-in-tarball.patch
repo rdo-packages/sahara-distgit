@@ -1,6 +1,18 @@
---- MANIFEST.in	2014-04-17 10:02:06.000000000 -0400
-+++ MANIFEST.in	2014-05-06 14:28:35.997635457 -0400
-@@ -4,8 +4,10 @@
+From 0ff3a87a05065456d589465643cb817cac4d0d83 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Thu, 17 Jul 2014 12:01:00 +0100
+Subject: [PATCH] reference actual plugins shipped in tarball
+
+Report and analysis from Dalmais Maxence <maxence.dalmais@worldline.com>
+---
+ MANIFEST.in |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+index dadbd42..6d5538b 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -4,8 +4,10 @@ include ChangeLog
  include LICENSE
  include sahara/db/migration/README
  include sahara/db/migration/alembic.ini
@@ -11,7 +23,7 @@
  
  recursive-include sahara/locale *
  
-@@ -20,10 +22,12 @@
+@@ -20,10 +22,12 @@ include sahara/plugins/vanilla/v2_3_0/resources/*.xml
  include sahara/plugins/vanilla/v2_3_0/resources/*.sh
  include sahara/plugins/vanilla/v2_3_0/resources/*.sql
  include sahara/plugins/vanilla/v2_3_0/resources/*.template

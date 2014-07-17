@@ -38,9 +38,13 @@ URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
-Patch0001:     0001-remove-runtime-dep-on-python-pbr.patch
-Patch0002:     0002-add-migrations-and-hdp-versions-to-manifest.patch
 BuildArch:     noarch
+
+#
+# patches_base=2014.1
+#
+Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
+Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
@@ -105,8 +109,8 @@ install, use, and manage the Sahara infrastructure.
 %prep
 %setup -q -n sahara-%{tmp_upstream_version}
 
-%patch0001 -p0
-%patch0002 -p0
+%patch0001 -p1
+%patch0002 -p1
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py

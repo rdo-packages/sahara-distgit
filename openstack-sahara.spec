@@ -19,23 +19,15 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
 %endif
 
-# This variable is defined to help with the transition from version 2014.1.b3
-# to 2014.1. With the package version set to 2014.1, the Obsoletes directive
-# will produce self-obsoletion warnings related to 2014.1 < 2014.1.b3 for some
-# tools. This can be seen by running `$ rpmdev-vercmp 2014.1 2014.1.b3`.
-# TODO mimccune remove this variable once the upstream version has moved past
-# 2014.1
-%global tmp_upstream_version 2014.1
-
 Name:          openstack-sahara
-Version:       2014.1.0
+Version:       2014.1
 Release:       14%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Obsoletes:     openstack-savanna <= 2014.1.b3-3
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:       http://tarballs.openstack.org/sahara/sahara-%{tmp_upstream_version}.tar.gz
+Source0:       http://tarballs.openstack.org/sahara/sahara-%{version}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
 BuildArch:     noarch
@@ -107,7 +99,7 @@ install, use, and manage the Sahara infrastructure.
 
 
 %prep
-%setup -q -n sahara-%{tmp_upstream_version}
+%setup -q -n sahara-%{version}
 
 %patch0001 -p1
 %patch0002 -p1
@@ -242,7 +234,7 @@ fi
 %dir %{_datadir}/sahara
 %{_datadir}/sahara/sahara.conf.sample
 %{python_sitelib}/sahara
-%{python_sitelib}/sahara-%{tmp_upstream_version}-py?.?.egg-info
+%{python_sitelib}/sahara-%{version}-py?.?.egg-info
 
 
 %files doc

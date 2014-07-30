@@ -1,3 +1,9 @@
+#
+# This is 2014.2 Juno-2 milestone
+#
+%global release_name juno
+%global milestone 2
+
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
 %global want_systemd 0
@@ -20,19 +26,20 @@
 %endif
 
 Name:          openstack-sahara
-Version:       2014.1.1
-Release:       1%{?dist}
+Version:       2014.2
+Release:       0.2.b%{milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:       http://tarballs.openstack.org/sahara/sahara-%{version}.tar.gz
+#Source0:        http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
+Source0:        http://launchpad.net/sahara/%{release_name}/%{release_name}-%{milestone}/+download/sahara-%{version}.b%{milestone}.tar.gz
 Source1:       openstack-sahara-api.service
 Source2:       openstack-sahara-api.init
 BuildArch:     noarch
 
 #
-# patches_base=2014.1.1
+# patches_base=2014.2.b2
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
@@ -98,7 +105,7 @@ install, use, and manage the Sahara infrastructure.
 
 
 %prep
-%setup -q -n sahara-%{version}
+%setup -q -n sahara-%{version}.b%{milestone}
 
 %patch0001 -p1
 %patch0002 -p1
@@ -106,18 +113,24 @@ install, use, and manage the Sahara infrastructure.
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
 
+sed -i 's/%{version}.b%{milestone}/%{version}/' PKG-INFO
+
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
 # The data_files glob appears broken in pbr 0.5.19, so be explicit
 sed -i 's,etc/sahara/\*,etc/sahara/sahara.conf.sample,' setup.cfg
 # remove the shbang from these files to supress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
+sed -i 1,2d sahara/cli/sahara_all.py
 sed -i 1,2d sahara/cli/sahara_api.py
+sed -i 1,2d sahara/cli/sahara_engine.py
 sed -i 1,2d sahara/cli/sahara_subprocess.py
-# set executable on this file to supress rpmlint warnings, it is used as a
-# template to create shell scripts.
-chmod a+x sahara/plugins/vanilla/v2_3_0/resources/post_conf.template
-
+# set executable on these files to supress rpmlint warnings, they are used as
+# templates to create shell scripts.
+chmod a+x sahara/plugins/vanilla/hadoop2/resources/post_conf.template
+chmod a+x sahara/plugins/spark/resources/spark-env.sh.template
+# also set executable on this topology script, should have been set upstream
+chmod a+x sahara/plugins/spark/resources/topology.sh
 
 %build
 %{__python2} setup.py build
@@ -224,7 +237,9 @@ fi
 %dir %{_sysconfdir}/sahara
 # Note: this file is not readable because it holds auth credentials
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
+%{_bindir}/sahara-all
 %{_bindir}/sahara-api
+%{_bindir}/sahara-engine
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
@@ -241,6 +256,9 @@ fi
 
 
 %changelog
+* Wed Jul 30 2014 Michael McCune <mimccune@redhat.com> - 2014.2-0.2.b2
+- juno-2 milestone
+
 * Thu Jul 17 2014 Pádraig Brady <pbrady@redhat.com> - 2014.1.1-1
 - Stable icehouse 2014.1.1 rebase
 

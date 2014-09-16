@@ -1,8 +1,8 @@
 #
-# This is 2014.2 Juno-2 milestone
+# This is 2014.2 Juno-3 milestone
 #
 %global release_name juno
-%global milestone 2
+%global milestone 3
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
@@ -39,7 +39,7 @@ Source2:       openstack-sahara-api.init
 BuildArch:     noarch
 
 #
-# patches_base=2014.2.b2
+# patches_base=2014.2.b3
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
@@ -256,6 +256,7 @@ fi
 
 
 %changelog
+* Tue Sep 16 2014 Michael McCune <mimccune@redhat.com> - 2014.2-0.2.b3
 * Wed Jul 30 2014 Michael McCune <mimccune@redhat.com> - 2014.2-0.2.b2
 - juno-2 milestone
 

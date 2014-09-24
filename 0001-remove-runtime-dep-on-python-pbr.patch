@@ -1,11 +1,11 @@
-From c7ca46c334d070078111e36b7962ec67585cbc66 Mon Sep 17 00:00:00 2001
+From 45bb666b284ca906e2b8a96ec4dd6168643d6330 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Thu, 17 Jul 2014 11:59:16 +0100
 Subject: [PATCH] remove runtime dep on python-pbr
 
 ---
- sahara/version.py |   15 +++++++++++++--
- 1 files changed, 13 insertions(+), 2 deletions(-)
+ sahara/version.py | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/sahara/version.py b/sahara/version.py
 index ba79883..fd70c87 100644

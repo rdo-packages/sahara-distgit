@@ -27,15 +27,15 @@
 
 Name:          openstack-sahara
 Version:       2014.2
-Release:       0.3.b%{milestone}%{?dist}
+Release:       0.4.b%{milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 #Source0:        http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
 Source0:        http://launchpad.net/sahara/%{release_name}/%{release_name}-%{milestone}/+download/sahara-%{version}.b%{milestone}.tar.gz
-Source1:       openstack-sahara-api.service
-Source2:       openstack-sahara-api.init
+Source1:       openstack-sahara-all.service
+Source2:       openstack-sahara-all.init
 BuildArch:     noarch
 
 #
@@ -43,6 +43,8 @@ BuildArch:     noarch
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
+Patch0003: 0003-Use-auth_uri-parameter-from-config.patch
+Patch0004: 0004-Adding-missing-CDH-resources-to-MANIFEST.in.patch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
@@ -109,6 +111,8 @@ install, use, and manage the Sahara infrastructure.
 
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
+%patch0004 -p1
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
@@ -147,10 +151,10 @@ rm -rf html/.{doctrees,buildinfo}
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
 %if %{want_systemd}
-install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-api.service
+install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-all.service
 %else
 install -d -m 755 %{buildroot}%{_localstatedir}/run/sahara
-install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-sahara-api
+install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-sahara-all
 %endif
 
 HOME=%{_sharedstatedir}/sahara
@@ -196,30 +200,30 @@ exit 0
 %post
 # TODO: if db file then sahara-db-manage update head
 %if %{want_systemd}
-%systemd_post openstack-sahara-api.service
+%systemd_post openstack-sahara-all.service
 %else
-/sbin/chkconfig --add openstack-sahara-api
+/sbin/chkconfig --add openstack-sahara-all
 %endif
 
 
 %preun
 %if %{want_systemd}
-%systemd_preun openstack-sahara-api.service
+%systemd_preun openstack-sahara-all.service
 %else
 if [ $1 -eq 0 ] ; then
-   /sbin/service openstack-sahara-api stop >/dev/null 2>&1
-   /sbin/chkconfig --del openstack-sahara-api
+   /sbin/service openstack-sahara-all stop >/dev/null 2>&1
+   /sbin/chkconfig --del openstack-sahara-all
 fi
 %endif
 
 
 %postun
 %if %{want_systemd}
-%systemd_postun_with_restart openstack-sahara-api.service
+%systemd_postun_with_restart openstack-sahara-all.service
 %else
 if [ $1 -ge 1 ] ; then
    # Package upgrade, not uninstall
-   /sbin/service openstack-sahara-api condrestart > /dev/null 2>&1 || :
+   /sbin/service openstack-sahara-all condrestart > /dev/null 2>&1 || :
 fi
 %endif
 
@@ -229,9 +233,9 @@ fi
 
 %if %{have_rhel6}
 %dir %attr(0755, %{sahara_user}, root) %{_localstatedir}/run/sahara
-%{_initrddir}/openstack-sahara-api
+%{_initrddir}/openstack-sahara-all
 %else
-%{_unitdir}/openstack-sahara-api.service
+%{_unitdir}/openstack-sahara-all.service
 %endif
 
 %dir %{_sysconfdir}/sahara
@@ -256,6 +260,12 @@ fi
 
 
 %changelog
+* Wed Sep 24 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.4.b3
+- Bug fixes to upstream 2014.2.b3
+- Resolves: rhbz#1144529
+- Resolves: rhbz#1144531
+- adding patch to fix keystonemiddleware==1.0.0 issues
+
 * Tue Sep 16 2014 Michael McCune <mimccune@redhat.com> - 2014.2-0.3.b3
 - spec cleanup
 

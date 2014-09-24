@@ -5,7 +5,7 @@ After=syslog.target network.target
 [Service]
 Type=simple
 User=sahara
-ExecStart=/usr/bin/sahara-api --config-file /etc/sahara/sahara.conf
+ExecStart=/usr/bin/sahara-all --config-file /etc/sahara/sahara.conf
 
 [Install]
 WantedBy=multi-user.target

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# openstack-sahara-api  OpenStack Sahara API Server
+# openstack-sahara-all  OpenStack Sahara API Server
 #
 # chkconfig:   - 98 02
 # description: Sahara provides the ability to elastically manage Apache \
@@ -18,11 +18,11 @@
 
 . /etc/rc.d/init.d/functions
 
-prog=openstack-sahara-api
-exec="/usr/bin/sahara-api"
+prog=openstack-sahara-all
+exec="/usr/bin/sahara-all"
 config="/etc/sahara/sahara.conf"
 logfile="/var/log/sahara/api.log"
-pidfile="/var/run/sahara/sahara-api.pid"
+pidfile="/var/run/sahara/sahara-all.pid"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 

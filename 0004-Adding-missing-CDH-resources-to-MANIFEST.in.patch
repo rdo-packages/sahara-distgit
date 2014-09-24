@@ -1,0 +1,27 @@
+From 9d14e43be744b27079f09c2b0ddd19bfe9aba7e0 Mon Sep 17 00:00:00 2001
+From: Michael McCune <mimccune@redhat.com>
+Date: Mon, 22 Sep 2014 21:39:04 -0400
+Subject: [PATCH] Adding missing CDH resources to MANIFEST.in
+
+Closes-Bug: #1372711
+Change-Id: I5f223cf92810ce00de1f79646c1f3a0b5c9cfaab
+
+Resolves: rhbz#1144529
+---
+ MANIFEST.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 07ba666..bd7117f 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -11,6 +11,9 @@ include sahara/db/migration/alembic_migrations/versions/*.py
+ 
+ recursive-include sahara/locale *
+ 
++include sahara/plugins/cdh/resources/cdh_config.py
++include sahara/plugins/cdh/resources/*.sh
++include sahara/plugins/cdh/resources/*.json
+ include sahara/plugins/vanilla/hadoop2/resources/*.sh
+ include sahara/plugins/vanilla/hadoop2/resources/*.sql
+ include sahara/plugins/vanilla/hadoop2/resources/*.template

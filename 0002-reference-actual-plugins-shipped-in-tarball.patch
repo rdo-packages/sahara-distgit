@@ -1,4 +1,4 @@
-From eef37a6b34b485ad5fd823a4bb8355e44a08f6db Mon Sep 17 00:00:00 2001
+From 5474db57ea7ad82426ea4ae39d7e0f0f0196be6d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Thu, 17 Jul 2014 12:01:00 +0100
 Subject: [PATCH] reference actual plugins shipped in tarball
@@ -9,7 +9,7 @@ Report and analysis from Dalmais Maxence <maxence.dalmais@worldline.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/MANIFEST.in b/MANIFEST.in
-index 96f5498..07ba666 100644
+index e30933f..bd7117f 100644
 --- a/MANIFEST.in
 +++ b/MANIFEST.in
 @@ -4,8 +4,10 @@ include ChangeLog
@@ -23,7 +23,7 @@ index 96f5498..07ba666 100644
  
  recursive-include sahara/locale *
  
-@@ -16,6 +18,9 @@ include sahara/plugins/vanilla/v1_2_1/resources/*.sh
+@@ -19,6 +21,9 @@ include sahara/plugins/vanilla/v1_2_1/resources/*.sh
  include sahara/plugins/vanilla/v1_2_1/resources/*.sql
  include sahara/plugins/vanilla/v1_2_1/resources/*.xml
  include sahara/plugins/vanilla/v2_3_0/resources/*.xml

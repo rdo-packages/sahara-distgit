@@ -1,8 +1,8 @@
 #
-# This is 2014.2 Juno-3 milestone
+# This is 2014.2 Juno-rc1 milestone
 #
 %global release_name juno
-%global milestone 3
+%global milestone rc1
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
@@ -27,24 +27,21 @@
 
 Name:          openstack-sahara
 Version:       2014.2
-Release:       0.4.b%{milestone}%{?dist}
+Release:       0.1.%{milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-#Source0:        http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
-Source0:        http://launchpad.net/sahara/%{release_name}/%{release_name}-%{milestone}/+download/sahara-%{version}.b%{milestone}.tar.gz
+Source0:        http://launchpad.net/sahara/%{release_name}/%{release_name}-%{milestone}/+download/sahara-%{version}.%{milestone}.tar.gz
 Source1:       openstack-sahara-all.service
 Source2:       openstack-sahara-all.init
 BuildArch:     noarch
 
 #
-# patches_base=2014.2.b3
+# patches_base=2014.2.rc1
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
-Patch0003: 0003-Use-auth_uri-parameter-from-config.patch
-Patch0004: 0004-Adding-missing-CDH-resources-to-MANIFEST.in.patch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
@@ -58,24 +55,32 @@ BuildRequires: python-pbr >= 0.5.19
 BuildRequires: systemd-units
 %endif
 
-Requires: python-alembic
+Requires: python-alembic >= 0.6.4
 #?Babel>=1.3?
-Requires: python-eventlet
-Requires: python-flask
-Requires: python-iso8601
-Requires: python-jsonschema >= 1.3.0
-Requires: python-oslo-config >= 1.2.0
-Requires: python-oslo-messaging
-Requires: python-paramiko >= 1.9.0
-Requires: python-cinderclient >= 1.0.5
-Requires: python-keystoneclient >= 0.6.0
-Requires: python-novaclient >= 2.15.0
-Requires: python-swiftclient
-Requires: python-neutronclient
-Requires: python-six >= 1.4.1
-Requires: python-stevedore >= 0.14
-Requires: python-webob
+Requires: python-cinderclient >= 1.0.9
+Requires: python-eventlet >= 0.15.1
+Requires: python-flask >= 0.10
+Requires: python-heatclient >= 0.2.9
+Requires: python-iso8601 >= 0.1.9
+Requires: python-jsonschema >= 2.0.0
+Requires: python-keystoneclient >= 0.10.0
+Requires: python-keystonemiddleware >= 1.0.0
+Requires: MySQL-python
+Requires: python-neutronclient >= 2.3.6
+Requires: python-novaclient >= 2.18.0
+Requires: python-oslo-config >= 1.4.0
+Requires: python-oslo-db >= 0.4.0
+Requires: python-oslo-i18n >= 0.3.0
+Requires: python-oslo-messaging >= 1.4.0
+Requires: python-oslo-serialization >= 0.3.0
+Requires: python-paramiko >= 1.10.0
+Requires: python-posix_ipc
+Requires: python-requests >= 1.2.1
+Requires: python-six >= 1.7.0
 Requires: python-sqlalchemy
+Requires: python-stevedore >= 0.15
+Requires: python-swiftclient >= 2.1.0
+Requires: python-webob >= 1.2.3
 
 %if %{want_systemd}
 Requires(post):   systemd
@@ -107,17 +112,15 @@ install, use, and manage the Sahara infrastructure.
 
 
 %prep
-%setup -q -n sahara-%{version}.b%{milestone}
+%setup -q -n sahara-%{version}.%{milestone}
 
 %patch0001 -p1
 %patch0002 -p1
-%patch0003 -p1
-%patch0004 -p1
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
 
-sed -i 's/%{version}.b%{milestone}/%{version}/' PKG-INFO
+sed -i 's/%{version}.%{milestone}/%{version}/' PKG-INFO
 
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
@@ -260,6 +263,9 @@ fi
 
 
 %changelog
+* Thu Oct 02 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.1.rc1
+- Update to upstream 2014.2.rc1
+
 * Wed Sep 24 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.4.b3
 - Bug fixes to upstream 2014.2.b3
 - Resolves: rhbz#1144529

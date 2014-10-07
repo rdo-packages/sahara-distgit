@@ -27,7 +27,7 @@
 
 Name:          openstack-sahara
 Version:       2014.2
-Release:       0.1.%{milestone}%{?dist}
+Release:       0.2.%{milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -65,7 +65,6 @@ Requires: python-iso8601 >= 0.1.9
 Requires: python-jsonschema >= 2.0.0
 Requires: python-keystoneclient >= 0.10.0
 Requires: python-keystonemiddleware >= 1.0.0
-Requires: MySQL-python
 Requires: python-neutronclient >= 2.3.6
 Requires: python-novaclient >= 2.18.0
 Requires: python-oslo-config >= 1.4.0
@@ -78,7 +77,7 @@ Requires: python-posix_ipc
 Requires: python-requests >= 1.2.1
 Requires: python-six >= 1.7.0
 Requires: python-sqlalchemy
-Requires: python-stevedore >= 0.15
+Requires: python-stevedore >= 0.14
 Requires: python-swiftclient >= 2.1.0
 Requires: python-webob >= 1.2.3
 
@@ -263,6 +262,9 @@ fi
 
 
 %changelog
+* Tue Oct 07 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.2.rc1
+- updating dependencies
+
 * Thu Oct 02 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.1.rc1
 - Update to upstream 2014.2.rc1
 

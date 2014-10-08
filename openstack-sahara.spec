@@ -1,8 +1,8 @@
 #
-# This is 2014.2 Juno-rc1 milestone
+# This is 2014.2 Juno-rc2 milestone
 #
 %global release_name juno
-%global milestone rc1
+%global milestone rc2
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
@@ -27,7 +27,7 @@
 
 Name:          openstack-sahara
 Version:       2014.2
-Release:       0.2.%{milestone}%{?dist}
+Release:       0.3.%{milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -38,7 +38,7 @@ Source2:       openstack-sahara-all.init
 BuildArch:     noarch
 
 #
-# patches_base=2014.2.rc1
+# patches_base=2014.2.rc2
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
@@ -258,10 +258,13 @@ fi
 
 
 %files doc
-%{_pkgdocdir}/html 
+%{_pkgdocdir}/html
 
 
 %changelog
+* Tue Oct 07 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.3.rc2
+- Update to upstream 2014.2.rc2
+
 * Tue Oct 07 2014 Michael McCune <mimccune@redhat.com> 2014.2-0.2.rc1
 - updating dependencies
 

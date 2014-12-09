@@ -26,13 +26,13 @@
 %endif
 
 Name:          openstack-sahara
-Version:       2014.2
+Version:       2014.2.1
 Release:       1%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:        http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
+Source0:       http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
 Source1:       openstack-sahara-all.service
 Source2:       openstack-sahara-all.init
 BuildArch:     noarch
@@ -246,7 +246,7 @@ fi
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
-%dir %attr(-, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
+%dir %attr(0750, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
 # Note: permissions on sahara's home are intentially 0700
 %dir %{_datadir}/sahara
 %{_datadir}/sahara/sahara.conf.sample
@@ -259,6 +259,10 @@ fi
 
 
 %changelog
+* Tue Dec 09 2014 Ethan Gafford <egafford@redhat.com> 2014.2.1-1
+- Update to upstream 2014.2.1
+- Changing log directory permissions to 0750.
+
 * Fri Oct 17 2014 Michael McCune <mimccune@redhat.com> 2014.2
 - Juno release
 

@@ -27,7 +27,7 @@
 
 Name:          openstack-sahara
 Version:       2014.2.1
-Release:       1%{?dist}
+Release:       2%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -164,7 +164,6 @@ SAMPLE=%{buildroot}%{_datadir}/sahara/sahara.conf.sample
 CONF=%{buildroot}%{_sysconfdir}/sahara/sahara.conf
 install -d -m 755 $(dirname $CONF)
 install -D -m 640 $SAMPLE $CONF
-sed -i -e "s,.*connection=.*,connection=sqlite:///$HOME/sahara-server.db," $CONF
 
 # Do not package tests
 rm -rf %{buildroot}%{python_sitelib}/sahara/tests
@@ -259,6 +258,10 @@ fi
 
 
 %changelog
+* Tue Dec 09 2014 Ethan Gafford <egafford@redhat.com> 2014.2.1-2
+- Removed sed replacement of default connection in /etc/sahara/sahara.conf
+- Resolves rhbz#1162304
+
 * Tue Dec 09 2014 Ethan Gafford <egafford@redhat.com> 2014.2.1-1
 - Update to upstream 2014.2.1
 - Changing log directory permissions to 0750.

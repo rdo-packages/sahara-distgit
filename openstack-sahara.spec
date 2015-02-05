@@ -2,7 +2,6 @@
 # This is 2014.2 Juno release
 #
 %global release_name juno
-%global milestone rc2
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %global have_rhel6 1
@@ -26,8 +25,8 @@
 %endif
 
 Name:          openstack-sahara
-Version:       2014.2.1
-Release:       2%{?dist}
+Version:       2014.2.2
+Release:       1%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -258,6 +257,9 @@ fi
 
 
 %changelog
+* Thu Feb 05 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-1
+- Update to upstream 2014.2.2
+
 * Tue Dec 09 2014 Ethan Gafford <egafford@redhat.com> 2014.2.1-2
 - Removed sed replacement of default connection in /etc/sahara/sahara.conf
 - Resolves rhbz#1162304

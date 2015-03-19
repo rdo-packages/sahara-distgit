@@ -26,7 +26,7 @@
 
 Name:          openstack-sahara
 Version:       2014.2.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -257,6 +257,9 @@ fi
 
 
 %changelog
+* Thu Mar 19 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-2
+- Updated with patches from RDO patches branch (no-op change)
+
 * Thu Feb 05 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-1
 - Update to upstream 2014.2.2
 

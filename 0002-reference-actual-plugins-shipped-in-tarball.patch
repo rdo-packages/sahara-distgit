@@ -1,4 +1,4 @@
-From 5474db57ea7ad82426ea4ae39d7e0f0f0196be6d Mon Sep 17 00:00:00 2001
+From e8cd671e9db78052594de7eeb0535b6dd5c73504 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Thu, 17 Jul 2014 12:01:00 +0100
 Subject: [PATCH] reference actual plugins shipped in tarball

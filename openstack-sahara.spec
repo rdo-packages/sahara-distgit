@@ -26,7 +26,7 @@
 
 Name:          openstack-sahara
 Version:       2014.2.2
-Release:       2%{?dist}
+Release:       3%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -44,7 +44,7 @@ BuildRequires: python-setuptools
 BuildRequires: python-sphinx >= 1.1.2
 BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
-BuildRequires: python-pbr >= 0.5.19
+BuildRequires: python-pbr >= 0.6
 
 %if %{want_systemd}
 # Need systemd-units for _unitdir macro
@@ -53,28 +53,30 @@ BuildRequires: systemd-units
 
 Requires: python-alembic >= 0.6.4
 #?Babel>=1.3?
-Requires: python-cinderclient >= 1.0.9
-Requires: python-eventlet >= 0.15.1
+Requires: python-cinderclient >= 1.1.0
+Requires: python-eventlet >= 0.16.0
 Requires: python-flask >= 0.10
 Requires: python-heatclient >= 0.2.9
 Requires: python-iso8601 >= 0.1.9
 Requires: python-jsonschema >= 2.0.0
 Requires: python-keystoneclient >= 0.10.0
 Requires: python-keystonemiddleware >= 1.0.0
+Requires: python-lockfile >= 0.8
 Requires: python-neutronclient >= 2.3.6
 Requires: python-novaclient >= 2.18.0
 Requires: python-oslo-config >= 1.4.0
-Requires: python-oslo-db >= 0.4.0
-Requires: python-oslo-i18n >= 0.3.0
+Requires: python-oslo-db >= 1.0.0
+Requires: python-oslo-i18n >= 1.0.0
 Requires: python-oslo-messaging >= 1.4.0
-Requires: python-oslo-serialization >= 0.3.0
-Requires: python-paramiko >= 1.10.0
+Requires: python-oslo-serialization >= 1.0.0
+Requires: python-oslo-utils >= 1.0.0
+Requires: python-paramiko >= 1.13.0
 Requires: python-posix_ipc
 Requires: python-requests >= 1.2.1
 Requires: python-six >= 1.7.0
-Requires: python-sqlalchemy
-Requires: python-stevedore >= 0.14
-Requires: python-swiftclient >= 2.1.0
+Requires: python-sqlalchemy >= 0.8.4
+Requires: python-stevedore >= 1.0.0
+Requires: python-swiftclient >= 2.2.0
 Requires: python-webob >= 1.2.3
 
 %if %{want_systemd}
@@ -257,6 +259,9 @@ fi
 
 
 %changelog
+* Fri Mar 20 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-3
+- Updated dependencies from upstream requirements.txt
+
 * Thu Mar 19 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-2
 - Updated with patches from RDO patches branch (no-op change)
 

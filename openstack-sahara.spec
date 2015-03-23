@@ -3,22 +3,8 @@
 #
 %global release_name juno
 
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%global have_rhel6 1
-%global want_systemd 0
-%else
-%global have_rhel6 0
-%global want_systemd 1
-%endif
-
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
-
-%if %{have_rhel6}
-%{!?__python2: %global __python2 /usr/bin/python2}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
@@ -26,16 +12,18 @@
 
 Name:          openstack-sahara
 Version:       2014.2.2
-Release:       3%{?dist}
+Release:       4%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
 Source1:       openstack-sahara-all.service
-Source2:       openstack-sahara-all.init
 BuildArch:     noarch
 
+#
+# patches_base=2014.2.2
+#
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
 
@@ -44,17 +32,13 @@ BuildRequires: python-setuptools
 BuildRequires: python-sphinx >= 1.1.2
 BuildRequires: python-oslo-sphinx
 BuildRequires: python-sphinxcontrib-httpdomain
-BuildRequires: python-pbr >= 0.6
-
-%if %{want_systemd}
-# Need systemd-units for _unitdir macro
+BuildRequires: python-pbr >= 0.5.19
 BuildRequires: systemd-units
-%endif
 
 Requires: python-alembic >= 0.6.4
 #?Babel>=1.3?
-Requires: python-cinderclient >= 1.1.0
-Requires: python-eventlet >= 0.16.0
+Requires: python-cinderclient >= 1.0.9
+Requires: python-eventlet >= 0.15.1
 Requires: python-flask >= 0.10
 Requires: python-heatclient >= 0.2.9
 Requires: python-iso8601 >= 0.1.9
@@ -65,29 +49,23 @@ Requires: python-lockfile >= 0.8
 Requires: python-neutronclient >= 2.3.6
 Requires: python-novaclient >= 2.18.0
 Requires: python-oslo-config >= 1.4.0
-Requires: python-oslo-db >= 1.0.0
-Requires: python-oslo-i18n >= 1.0.0
+Requires: python-oslo-db >= 0.4.0
+Requires: python-oslo-i18n >= 0.3.0
 Requires: python-oslo-messaging >= 1.4.0
-Requires: python-oslo-serialization >= 1.0.0
-Requires: python-oslo-utils >= 1.0.0
-Requires: python-paramiko >= 1.13.0
+Requires: python-oslo-serialization >= 0.3.0
+Requires: python-oslo-utils
+Requires: python-paramiko >= 1.10.0
 Requires: python-posix_ipc
 Requires: python-requests >= 1.2.1
 Requires: python-six >= 1.7.0
-Requires: python-sqlalchemy >= 0.8.4
-Requires: python-stevedore >= 1.0.0
-Requires: python-swiftclient >= 2.2.0
+Requires: python-sqlalchemy
+Requires: python-stevedore >= 0.14
+Requires: python-swiftclient >= 2.1.0
 Requires: python-webob >= 1.2.3
 
-%if %{want_systemd}
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-%else
-Requires(post):   chkconfig
-Requires(preun):  initscripts
-Requires(postun): chkconfig
-%endif
 Requires(pre):    shadow-utils
 
 
@@ -150,12 +128,7 @@ rm -rf html/.{doctrees,buildinfo}
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
-%if %{want_systemd}
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-all.service
-%else
-install -d -m 755 %{buildroot}%{_localstatedir}/run/sahara
-install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-sahara-all
-%endif
 
 HOME=%{_sharedstatedir}/sahara
 install -d -m 700 %{buildroot}$HOME
@@ -198,44 +171,21 @@ exit 0
 
 %post
 # TODO: if db file then sahara-db-manage update head
-%if %{want_systemd}
 %systemd_post openstack-sahara-all.service
-%else
-/sbin/chkconfig --add openstack-sahara-all
-%endif
 
 
 %preun
-%if %{want_systemd}
 %systemd_preun openstack-sahara-all.service
-%else
-if [ $1 -eq 0 ] ; then
-   /sbin/service openstack-sahara-all stop >/dev/null 2>&1
-   /sbin/chkconfig --del openstack-sahara-all
-fi
-%endif
 
 
 %postun
-%if %{want_systemd}
 %systemd_postun_with_restart openstack-sahara-all.service
-%else
-if [ $1 -ge 1 ] ; then
-   # Package upgrade, not uninstall
-   /sbin/service openstack-sahara-all condrestart > /dev/null 2>&1 || :
-fi
-%endif
 
 
 %files
 %doc README.rst LICENSE
 
-%if %{have_rhel6}
-%dir %attr(0755, %{sahara_user}, root) %{_localstatedir}/run/sahara
-%{_initrddir}/openstack-sahara-all
-%else
 %{_unitdir}/openstack-sahara-all.service
-%endif
 
 %dir %{_sysconfdir}/sahara
 # Note: this file is not readable because it holds auth credentials
@@ -259,6 +209,10 @@ fi
 
 
 %changelog
+* Mon Mar 23 2015 Ethan Gafford <egafford@redhat.com> 2015.2.2-4
+- Downgraded most dependencies for older Fedora compatibility
+- Removed pre-systemd packaging apparatus
+
 * Fri Mar 20 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-3
 - Updated dependencies from upstream requirements.txt
 

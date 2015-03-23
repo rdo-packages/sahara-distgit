@@ -26,6 +26,7 @@ BuildArch:     noarch
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-reference-actual-plugins-shipped-in-tarball.patch
+Patch0003: 0003-Include-launch_command.py-in-MANIFEST.in.patch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
@@ -91,6 +92,7 @@ install, use, and manage the Sahara infrastructure.
 
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
@@ -210,6 +212,8 @@ exit 0
 
 %changelog
 * Mon Mar 23 2015 Ethan Gafford <egafford@redhat.com> 2015.2.2-4
+- Added launch_command.py to MANIFEST.in
+- Resolves: rhbz#1184522
 - Downgraded most dependencies for older Fedora compatibility
 - Removed pre-systemd packaging apparatus
 

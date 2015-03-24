@@ -1,0 +1,11 @@
+[Unit]
+Description=Sahara API Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=sahara
+ExecStart=/usr/bin/sahara-api --config-file /etc/sahara/sahara.conf
+
+[Install]
+WantedBy=multi-user.target

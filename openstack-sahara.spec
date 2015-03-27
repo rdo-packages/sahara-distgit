@@ -221,7 +221,7 @@ install, use, and manage the Sahara infrastructure.
 ######################
 
 %prep
-%setup -q -n sahara-%{version}
+%setup -q -n sahara-%{upstream_version}
 
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py

@@ -1,13 +1,8 @@
-###################################
-# This is 2015.1.0b3 Kilo release #
-###################################
-
 #######################
 # Globals Declaration #
 #######################
 
-%global release_name kilo
-%global release_version kilo-3
+%global release_name liberty
 
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
@@ -28,20 +23,21 @@ Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 #Source0:       http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
-Source0:       http://launchpad.net/sahara/%{release_name}/%{release-version}/+download/sahara-%{version}.tar.gz
+Source0:       http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
 Source1:       openstack-sahara-all.service
 Source2:       openstack-sahara-api.service
 Source3:       openstack-sahara-engine.service
 BuildArch:     noarch
 
 #
-# patches_base=2015.1.0b3
+# patches_base=2015.2
 #
 
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-sphinx >= 1.1.2
-BuildRequires:    python-oslo-sphinx
+BuildRequires:    python-oslo-config >= 1.4.0
+BuildRequires:    python-oslo-sphinx >= 2.5.0
 BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 0.5.19
 BuildRequires:    systemd-units
@@ -81,7 +77,7 @@ Requires:         python-eventlet >= 0.15.1
 Requires:         python-flask >= 0.10
 Requires:         python-heatclient >= 0.2.9
 Requires:         python-iso8601 >= 0.1.9
-Requires:         python-jinja
+Requires:         python-jinja2
 Requires:         python-jsonschema >= 2.0.0
 Requires:         python-keystoneclient >= 0.10.0
 Requires:         python-keystonemiddleware >= 1.0.0
@@ -137,13 +133,14 @@ exit 0
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
 %{_bindir}/sahara-rootwrap
+%{_bindir}/sahara-templates
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
 %dir %attr(0750, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
-# Note: permissions on sahara's home are intentially 0700
+# Note: permissions on sahara's home are intentionally 0700
 %dir %{_datadir}/sahara
 %{_datadir}/sahara/sahara.conf.sample
 %{python2_sitelib}/sahara
-%{python2_sitelib}/sahara-%{version}-py?.?.egg-info
+%{python2_sitelib}/sahara-%{version}*-py?.?.egg-info
 
 #################
 # openstack-doc #
@@ -230,6 +227,7 @@ sed -i 's/%{version}/%{version}/' PKG-INFO
 
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
+oslo-config-generator --config-file tools/config/config-generator.sahara.conf --output-file etc/sahara/sahara.conf.sample
 # The data_files glob appears broken in pbr 0.5.19, so be explicit
 sed -i 's,etc/sahara/\*,etc/sahara/sahara.conf.sample,' setup.cfg
 # remove the shbang from these files to supress rpmlint warnings, these are
@@ -250,8 +248,6 @@ chmod a+x sahara/plugins/spark/resources/topology.sh
 
 export PYTHONPATH=$PWD:${PYTHONPATH}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
-# make doc build compatible with python-oslo-sphinx RPM
-sed -i 's/oslosphinx/oslo.sphinx/' doc/source/conf.py
 sphinx-build doc/source html
 rm -rf html/.{doctrees,buildinfo}
 
@@ -281,7 +277,6 @@ mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 mkdir -p %{buildroot}/%{_pkgdocdir}
 cp -rp html %{buildroot}/%{_pkgdocdir}
 
-
 %check
 # Building on koji with virtualenv requires test-requirements.txt and this
 # causes errors when trying to resolve the package names, also turning on pep8
@@ -293,10 +288,13 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Tue Apr 21 2015 Ethan Gafford <egafford@redhat.com> 2015.2
+- Update to Liberty
+
 * Tue Mar 24 2015 Ethan Gafford <egafford@redhat.com> 2015.1-0.1.0b3
 - Update to upstream 2015.1.0b3
 
-* Mon Mar 23 2015 Ethan Gafford <egafford@redhat.com> 2015.2.2-4
+* Mon Mar 23 2015 Ethan Gafford <egafford@redhat.com> 2014.2.2-4
 - Added launch_command.py to MANIFEST.in
 - Resolves: rhbz#1184522
 - Downgraded most dependencies for older Fedora compatibility

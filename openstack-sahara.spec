@@ -24,22 +24,21 @@
 
 Name:          openstack-sahara
 Version:       2015.1
-Release:       0.1%{?milestone}%{?dist}
+Release:       0.2%{?milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://launchpad.net/%{service}/%{release_name}/%{release_name}-rc2/+download/%{service}-%{upstream_version}.tar.gz
-Source1:       openstack-sahara-all.service
-Source2:       openstack-sahara-api.service
-Source3:       openstack-sahara-engine.service
+Source1:       sahara.conf.sample
+Source2:       openstack-sahara-all.service
+Source3:       openstack-sahara-api.service
+Source4:       openstack-sahara-engine.service
 BuildArch:     noarch
 
 #
 # patches_base=%{version}%{?milestone}
 #
-Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
-Patch0002: 0002-Adding-sahara.conf.sample.patch
 
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
@@ -103,6 +102,7 @@ Requires:         python-oslo-rootwrap
 Requires:         python-oslo-serialization >= 0.3.0
 Requires:         python-oslo-utils
 Requires:         python-paramiko >= 1.10.0
+Requires:         python-pbr >= 0.5.19
 Requires:         python-requests >= 1.2.1
 Requires:         python-six >= 1.7.0
 Requires:         python-sqlalchemy
@@ -229,9 +229,6 @@ install, use, and manage the Sahara infrastructure.
 %prep
 %setup -q -n sahara-%{upstream_version}
 
-%patch0001 -p1
-%patch0002 -p1
-
 sed -i s/REDHAT_SAHARA_VERSION/%{version}/ sahara/version.py
 sed -i s/REDHAT_SAHARA_RELEASE/%{release}/ sahara/version.py
 
@@ -239,6 +236,7 @@ sed -i 's/%{version}/%{version}/' PKG-INFO
 
 rm -rf sahara.egg-info
 rm -f test-requirements.txt
+cp %{SOURCE1} etc/sahara/sahara.conf.sample
 # The data_files glob appears broken in pbr 0.5.19, so be explicit
 sed -i 's,etc/sahara/\*,etc/sahara/sahara.conf.sample,' setup.cfg
 # remove the shbang from these files to supress rpmlint warnings, these are
@@ -266,9 +264,9 @@ rm -rf html/.{doctrees,buildinfo}
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
 
-install -p -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/openstack-sahara-all.service
-install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-api.service
-install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
+install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-all.service
+install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-api.service
+install -p -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
 
 HOME=%{_sharedstatedir}/sahara
 install -d -m 700 %{buildroot}$HOME
@@ -299,7 +297,10 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
-* Wed Apr 29 2015 Ethan Gafford <egafford@redaht.com> 2015.1-0.1.0rc2
+* Wed Apr 29 2015 Ethan Gafford <egafford@redhat.com> 2015.1-0.2.0rc2
+- Removing patches unnecessary per kilo guidelines
+
+* Wed Apr 29 2015 Ethan Gafford <egafford@redhat.com> 2015.1-0.1.0rc2
 - Update to version tracking for Fedora and Delorean compatibility
 
 * Thu Apr 23 2015 Ethan Gafford <egafford@redhat.com> 2015.1.0rc2-1

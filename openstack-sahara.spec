@@ -1,13 +1,15 @@
-###################################
+####################################
 # This is 2015.1.0rc2 Kilo release #
-###################################
+####################################
 
 #######################
 # Globals Declaration #
 #######################
 
 %global release_name kilo
-%global release_version kilo-rc2
+%global milestone .0rc2
+%global service sahara
+%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
@@ -21,21 +23,20 @@
 ####################
 
 Name:          openstack-sahara
-Version:       2015.1.0rc2
-Release:       1%{?dist}
+Version:       2015.1
+Release:       0.1%{?milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-#Source0:       http://launchpad.net/sahara/%{release_name}/%{version}/+download/sahara-%{version}.tar.gz
-Source0:       http://launchpad.net/sahara/%{release_name}/%{release_version}/+download/sahara-%{version}.tar.gz
+Source0:       http://launchpad.net/%{service}/%{release_name}/%{release_name}-rc2/+download/%{service}-%{upstream_version}.tar.gz
 Source1:       openstack-sahara-all.service
 Source2:       openstack-sahara-api.service
 Source3:       openstack-sahara-engine.service
 BuildArch:     noarch
 
 #
-# patches_base=2015.1.0rc2
+# patches_base=%{version}%{?milestone}
 #
 Patch0001: 0001-remove-runtime-dep-on-python-pbr.patch
 Patch0002: 0002-Adding-sahara.conf.sample.patch
@@ -226,7 +227,7 @@ install, use, and manage the Sahara infrastructure.
 ######################
 
 %prep
-%setup -q -n sahara-%{version}
+%setup -q -n sahara-%{upstream_version}
 
 %patch0001 -p1
 %patch0002 -p1
@@ -298,6 +299,9 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Wed Apr 29 2015 Ethan Gafford <egafford@redaht.com> 2015.1-0.1.0rc2
+- Update to version tracking for Fedora and Delorean compatibility
+
 * Thu Apr 23 2015 Ethan Gafford <egafford@redhat.com> 2015.1.0rc2-1
 - Update to upstream 2015.1.0rc2
 

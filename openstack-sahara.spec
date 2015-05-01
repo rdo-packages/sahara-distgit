@@ -1,13 +1,8 @@
-####################################
-# This is 2015.1.0rc2 Kilo release #
-####################################
-
 #######################
 # Globals Declaration #
 #######################
 
 %global release_name kilo
-%global milestone .0rc2
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
@@ -23,13 +18,13 @@
 ####################
 
 Name:          openstack-sahara
-Version:       2015.1
-Release:       0.2%{?milestone}%{?dist}
+Version:       2015.1.0
+Release:       1%{?milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:       http://launchpad.net/%{service}/%{release_name}/%{release_name}-rc2/+download/%{service}-%{upstream_version}.tar.gz
+Source0:       http://launchpad.net/%{service}/%{release_name}/%{version}/+download/%{service}-%{upstream_version}.tar.gz
 Source1:       sahara.conf.sample
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -297,6 +292,9 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Fri May 01 2015 Ethan Gafford <egafford@redhat.com> 2015.1.0-1
+- Update to upstream 2015.1.0
+
 * Wed Apr 29 2015 Ethan Gafford <egafford@redhat.com> 2015.1-0.2.0rc2
 - Removing patches unnecessary per kilo guidelines
 

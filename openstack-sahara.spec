@@ -19,7 +19,7 @@
 
 Name:          openstack-sahara
 Version:       2015.1.0
-Release:       1%{?milestone}%{?dist}
+Release:       2%{?milestone}%{?dist}
 Provides:      openstack-savanna = %{version}-%{release}
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -292,6 +292,9 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2015.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Fri May 01 2015 Ethan Gafford <egafford@redhat.com> 2015.1.0-1
 - Update to upstream 2015.1.0
 

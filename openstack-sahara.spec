@@ -94,6 +94,7 @@ Requires:         python-oslo-middleware
 Requires:         python-oslo-policy
 Requires:         python-oslo-rootwrap
 Requires:         python-oslo-serialization >= 0.3.0
+Requires:         python-oslo-service
 Requires:         python-oslo-utils
 Requires:         python-paramiko >= 1.10.0
 Requires:         python-pbr >= 0.5.19

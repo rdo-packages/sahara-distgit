@@ -70,35 +70,37 @@ OpenStack.
 %package common
 Summary:          Components common to all Sahara services
 
-Requires:         python-alembic >= 0.6.4
-#?Babel>=1.3?
+Requires:         python-alembic >= 0.7.2
+Requires:         python-babel
+Requires:         python-barbicanclient
 Requires:         python-cinderclient >= 1.0.9
-Requires:         python-eventlet >= 0.15.1
+Requires:         python-eventlet >= 0.17.3
 Requires:         python-flask >= 0.10
 Requires:         python-heatclient >= 0.2.9
 Requires:         python-iso8601 >= 0.1.9
 Requires:         python-jinja2
 Requires:         python-jsonschema >= 2.0.0
-Requires:         python-keystoneclient >= 0.10.0
-Requires:         python-keystonemiddleware >= 1.0.0
+Requires:         python-keystoneclient >= 1.6.0
+Requires:         python-keystonemiddleware >= 2.0.0
+Requires:         python-manilaclient
 Requires:         python-neutronclient >= 2.3.6
 Requires:         python-novaclient >= 2.18.0
 Requires:         python-oslo-concurrency
 Requires:         python-oslo-config >= 1.4.0
 Requires:         python-oslo-context
-Requires:         python-oslo-db >= 0.4.0
+Requires:         python-oslo-db >= 2.0
 Requires:         python-oslo-i18n >= 0.3.0
 Requires:         python-oslo-log
 Requires:         python-oslo-messaging >= 1.4.0
 Requires:         python-oslo-middleware
 Requires:         python-oslo-policy
 Requires:         python-oslo-rootwrap
-Requires:         python-oslo-serialization >= 0.3.0
+Requires:         python-oslo-serialization >= 1.4.0
 Requires:         python-oslo-service
 Requires:         python-oslo-utils
 Requires:         python-paramiko >= 1.10.0
-Requires:         python-pbr >= 0.5.19
-Requires:         python-requests >= 2.3.1
+Requires:         python-pbr
+Requires:         python-requests >= 2.5.2
 Requires:         python-six >= 1.7.0
 Requires:         python-sqlalchemy
 Requires:         python-stevedore >= 0.14

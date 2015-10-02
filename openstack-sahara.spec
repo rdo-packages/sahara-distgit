@@ -21,7 +21,7 @@
 Name:          openstack-sahara
 Epoch:         1
 Version:       3.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       0.2%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -136,6 +136,9 @@ exit 0
 # Note: this file is not readable because it holds auth credentials
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/policy.json
+%config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/rootwrap.conf
+%config(noreplace) %{_sysconfdir}/sudoers.d/sahara-rootwrap
+%{_sysconfdir}/sahara/rootwrap.d/
 %{_bindir}/sahara-all
 %{_bindir}/sahara-api
 %{_bindir}/sahara-engine
@@ -145,6 +148,7 @@ exit 0
 %{_bindir}/sahara-templates
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
 %dir %attr(0750, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
+%{_datarootdir}/sahara/
 # Note: permissions on sahara's home are intentionally 0700
 %dir %{_datadir}/sahara
 %{_datadir}/sahara/sahara.conf.sample
@@ -273,6 +277,17 @@ CONF=%{buildroot}%{_sysconfdir}/sahara/sahara.conf
 install -d -m 755 $(dirname $CONF)
 install -D -m 640 $SAMPLE $CONF
 install -D -m 640 etc/sahara/policy.json %{buildroot}%{_sysconfdir}/sahara/policy.json
+install -p -D -m 640 etc/sahara/rootwrap.conf %{buildroot}%{_sysconfdir}/sahara/rootwrap.conf
+install -p -D -m 640 etc/sudoers.d/sahara-rootwrap %{buildroot}%{_sysconfdir}/sudoers.d/sahara-rootwrap
+
+# Install rootwrap files in /usr/share/sahara/rootwrap
+mkdir -p %{buildroot}%{_datarootdir}/sahara/rootwrap/
+install -p -D -m 644 etc/sahara/rootwrap.d/* %{buildroot}%{_datarootdir}/sahara/rootwrap/
+# And add symlink under /etc/sahara/rootwrap.d, because the default config file needs that
+mkdir -p %{buildroot}%{_sysconfdir}/sahara/rootwrap.d
+for filter in %{buildroot}%{_datarootdir}/sahara/rootwrap/*.filters; do
+ln -s %{_datarootdir}/sahara/rootwrap/$(basename $filter) %{buildroot}%{_sysconfdir}/sahara/rootwrap.d/
+done
 
 # Do not package tests
 rm -rf %{buildroot}%{python2_sitelib}/sahara/tests
@@ -294,5 +309,9 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Fri Oct 02 2015 Ethan Gafford <egafford@redhat.com> 1:3.0.0-0.2.0rc1
+- Added rootwrap conf and filters
+- Resolves: rhbz#1268235
+
 * Thu Oct 01 2015 Ethan Gafford <egafford@redhat.com> 1:3.0.0-0.1.0rc1
 - Update to upstream 3.0.0.0rc1

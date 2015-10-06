@@ -28,7 +28,6 @@ Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/%{service}/%{service}-master.tar.gz
-Source1:       sahara.conf.sample
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
 Source4:       openstack-sahara-engine.service
@@ -41,6 +40,37 @@ BuildRequires:    python-oslo-sphinx >= 2.5.0
 BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 0.5.19
 BuildRequires:    systemd-units
+
+# config generator
+BuildRequires:    python-zmq
+BuildRequires:    python-redis
+BuildRequires:    python-oslo-config >= 1.4.0
+
+# test requirements
+BuildRequires:    python-testresources
+BuildRequires:    python-oslotest
+BuildRequires:    python-hacking
+BuildRequires:    python-alembic
+BuildRequires:    python-barbicanclient
+BuildRequires:    python-cinderclient >= 1.0.9
+BuildRequires:    python-flask >= 0.10
+BuildRequires:    python-heatclient >= 0.2.9
+BuildRequires:    python-jsonschema >= 2.0.0
+BuildRequires:    python-keystoneclient >= 1.6.0
+BuildRequires:    python-keystonemiddleware >= 2.0.0
+BuildRequires:    python-paramiko >= 1.10.0
+BuildRequires:    python-manilaclient
+BuildRequires:    python-neutronclient >= 2.3.6
+BuildRequires:    python-novaclient >= 2.18.0
+BuildRequires:    python-oslo-concurrency
+BuildRequires:    python-oslo-db >= 2.0
+BuildRequires:    python-oslo-i18n >= 0.3.0
+BuildRequires:    python-oslo-log
+BuildRequires:    python-oslo-messaging >= 1.4.0
+BuildRequires:    python-oslo-policy
+BuildRequires:    python-oslo-serialization >= 1.4.0
+BuildRequires:    python-swiftclient >= 2.1.0
+BuildRequires:    python-oslo-utils
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
@@ -128,7 +158,8 @@ getent passwd $USERNAME >/dev/null || \
 exit 0
 
 %files common
-%doc README.rst LICENSE
+%doc README.rst
+%license LICENSE
 %dir %{_sysconfdir}/sahara
 # Note: this file is not readable because it holds auth credentials
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
@@ -148,7 +179,6 @@ exit 0
 %{_datarootdir}/sahara/
 # Note: permissions on sahara's home are intentionally 0700
 %dir %{_datadir}/sahara
-%{_datadir}/sahara/sahara.conf.sample
 %{python2_sitelib}/sahara
 %{python2_sitelib}/sahara-%{version}*-py?.?.egg-info
 
@@ -167,6 +197,7 @@ OpenStack. This documentation provides instructions and examples on how to
 install, use, and manage the Sahara infrastructure.
 
 %files doc
+%license LICENSE
 %{_pkgdocdir}/html
 
 ####################
@@ -230,13 +261,9 @@ install, use, and manage the Sahara infrastructure.
 %prep
 %setup -q -n sahara-%{upstream_version}
 
-sed -i 's/%{version}/%{version}/' PKG-INFO
+# let RPM handle deps
+rm -rf {test-,}requirements.txt
 
-rm -rf sahara.egg-info
-rm -f test-requirements.txt
-cp %{SOURCE1} etc/sahara/sahara.conf.sample
-# The data_files glob appears broken in pbr 0.5.19, so be explicit
-sed -i 's,etc/sahara/\*,etc/sahara/sahara.conf.sample,' setup.cfg
 # remove the shbang from these files to supress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
 sed -i 1,2d sahara/cli/sahara_all.py
@@ -258,6 +285,7 @@ export PYTHONPATH=$PWD:${PYTHONPATH}
 sphinx-build doc/source html
 rm -rf html/.{doctrees,buildinfo}
 
+PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
 
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
@@ -269,10 +297,7 @@ install -p -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/openstack-sahara-engine.
 HOME=%{_sharedstatedir}/sahara
 install -d -m 700 %{buildroot}$HOME
 
-SAMPLE=%{buildroot}%{_datadir}/sahara/sahara.conf.sample
-CONF=%{buildroot}%{_sysconfdir}/sahara/sahara.conf
-install -d -m 755 $(dirname $CONF)
-install -D -m 640 $SAMPLE $CONF
+install -p -D -m 640 etc/sahara/sahara.conf %{buildroot}%{_sysconfdir}/sahara/sahara.conf
 install -D -m 640 etc/sahara/policy.json %{buildroot}%{_sysconfdir}/sahara/policy.json
 install -p -D -m 640 etc/sahara/rootwrap.conf %{buildroot}%{_sysconfdir}/sahara/rootwrap.conf
 install -p -D -m 640 etc/sudoers.d/sahara-rootwrap %{buildroot}%{_sysconfdir}/sudoers.d/sahara-rootwrap
@@ -286,9 +311,6 @@ for filter in %{buildroot}%{_datarootdir}/sahara/rootwrap/*.filters; do
 ln -s %{_datarootdir}/sahara/rootwrap/$(basename $filter) %{buildroot}%{_sysconfdir}/sahara/rootwrap.d/
 done
 
-# Do not package tests
-rm -rf %{buildroot}%{python2_sitelib}/sahara/tests
-
 mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 
 # Copy built doc files for doc subpackage
@@ -296,10 +318,7 @@ mkdir -p %{buildroot}/%{_pkgdocdir}
 cp -rp html %{buildroot}/%{_pkgdocdir}
 
 %check
-# Building on koji with virtualenv requires test-requirements.txt and this
-# causes errors when trying to resolve the package names, also turning on pep8
-# results in odd exceptions from flake8.
-# sh run_tests.sh --no-virtual-env --no-pep8
+sh run_tests.sh --no-virtual-env
 
 #############
 # Changelog #

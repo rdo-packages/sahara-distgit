@@ -4,7 +4,6 @@
 
 %global release_name liberty
 %global service sahara
-%global milestone .0rc1
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
 %global sahara_user sahara
@@ -21,12 +20,12 @@
 Name:          openstack-sahara
 Epoch:         1
 Version:       3.0.0
-Release:       0.2%{?milestone}%{?dist}
+Release:       2%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:       http://launchpad.net/%{service}/%{release_name}/%{release_name}-rc1/+download/%{service}-%{upstream_version}.tar.gz
+Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 Source1:       sahara.conf.sample
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -309,6 +308,9 @@ cp -rp html %{buildroot}/%{_pkgdocdir}
 #############
 
 %changelog
+* Sat Oct 17 2015 Haikel Guemar <hguemar@fedoraproject.org> 1:3.0.0-2
+- Update to upstream 3.0.0
+
 * Fri Oct 02 2015 Ethan Gafford <egafford@redhat.com> 1:3.0.0-0.2.0rc1
 - Added rootwrap conf and filters
 - Resolves: rhbz#1268235

@@ -286,6 +286,7 @@ sphinx-build doc/source html
 rm -rf html/.{doctrees,buildinfo}
 
 PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
+sed -i 's#^\#api_paste_config.*#api_paste_config = /usr/share/sahara/api-paste.ini#' etc/sahara/sahara.conf
 
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}

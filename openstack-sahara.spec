@@ -28,6 +28,7 @@ Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/%{service}/%{service}-master.tar.gz
+Source1:       sahara.logrotate
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
 Source4:       openstack-sahara-engine.service
@@ -166,6 +167,7 @@ exit 0
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/policy.json
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/rootwrap.conf
 %config(noreplace) %{_sysconfdir}/sudoers.d/sahara-rootwrap
+%config(noreplace) %{_sysconfdir}/logrotate.d/openstack-sahara
 %{_sysconfdir}/sahara/rootwrap.d/
 %{_bindir}/sahara-all
 %{_bindir}/sahara-api
@@ -294,6 +296,8 @@ sed -i 's#^\#api_paste_config.*#api_paste_config = /usr/share/sahara/api-paste.i
 install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-all.service
 install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-api.service
 install -p -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
+
+install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-sahara
 
 HOME=%{_sharedstatedir}/sahara
 install -d -m 700 %{buildroot}$HOME

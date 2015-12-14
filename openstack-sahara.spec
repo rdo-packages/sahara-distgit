@@ -93,12 +93,12 @@ OpenStack.
 %postun
 %systemd_postun_with_restart openstack-sahara-all.service
 
-####################
-# openstack-common #
-####################
+#################
+# python-sahara #
+#################
 
-%package common
-Summary:          Components common to all Sahara services
+%package -n python-sahara
+Summary:          Sahara Python libraries
 
 Requires:         python-alembic >= 0.8.0
 Requires:         python-babel >= 1.3
@@ -137,6 +137,24 @@ Requires:         python-stevedore >= 1.5.0
 Requires:         python-swiftclient >= 2.2.0
 Requires:         python-webob >= 1.2.3
 
+%description -n python-sahara
+Sahara provides the ability to elastically manage Apache Hadoop clusters on
+OpenStack. This package contains the Sahara Python library.
+
+%files -n python-sahara
+%doc README.rst
+%license LICENSE
+%{python2_sitelib}/sahara
+%{python2_sitelib}/sahara-%{upstream_version}-py?.?.egg-info
+
+####################
+# openstack-common #
+####################
+
+%package common
+Summary:          Components common to all Sahara services
+
+Requires:         python-sahara = %{epoch}:%{version}-%{release}
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
@@ -179,8 +197,6 @@ exit 0
 %{_datarootdir}/sahara/
 # Note: permissions on sahara's home are intentionally 0700
 %dir %{_datadir}/sahara
-%{python2_sitelib}/sahara
-%{python2_sitelib}/sahara-%{version}*-py?.?.egg-info
 
 #################
 # openstack-doc #

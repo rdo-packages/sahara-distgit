@@ -188,9 +188,6 @@ exit 0
 %config(noreplace) %{_sysconfdir}/sudoers.d/sahara-rootwrap
 %config(noreplace) %{_sysconfdir}/logrotate.d/openstack-sahara
 %{_sysconfdir}/sahara/rootwrap.d/
-%{_bindir}/sahara-all
-%{_bindir}/sahara-api
-%{_bindir}/sahara-engine
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
 %{_bindir}/sahara-rootwrap
@@ -285,11 +282,12 @@ rm -rf {test-,}requirements.txt
 
 # remove the shbang from these files to supress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
-sed -i 1,2d sahara/cli/sahara_all.py
-sed -i 1,2d sahara/cli/sahara_api.py
-sed -i 1,2d sahara/cli/sahara_engine.py
-sed -i 1,2d sahara/cli/sahara_subprocess.py
-# set executable on these files to supress rpmlint warnings, they are used as
+for file in sahara/cli/*.py; do
+    sed -i 1,2d $file > $file.new &&
+    touch -r $file $file.new &&
+    mv $file.new $file
+done
+# set executable on these files to suppress rpmlint warnings, they are used as
 # templates to create shell scripts.
 chmod a+x sahara/plugins/vanilla/hadoop2/resources/post_conf.template
 chmod a+x sahara/plugins/spark/resources/spark-env.sh.template

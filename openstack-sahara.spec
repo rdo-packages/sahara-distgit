@@ -72,6 +72,7 @@ BuildRequires:    python-oslo-policy >= 0.5.0
 BuildRequires:    python-oslo-serialization >= 1.4.0
 BuildRequires:    python-swiftclient >= 2.2.0
 BuildRequires:    python-oslo-utils >= 2.0.0
+BuildRequires:    python-routes
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}

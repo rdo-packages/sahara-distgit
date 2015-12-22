@@ -280,7 +280,7 @@ install, use, and manage the Sahara infrastructure.
 # let RPM handle deps
 rm -rf {test-,}requirements.txt
 
-# remove the shbang from these files to supress rpmlint warnings, these are
+# remove the shbang from these files to suppress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
 for file in sahara/cli/*.py; do
     sed -i 1,2d $file > $file.new &&

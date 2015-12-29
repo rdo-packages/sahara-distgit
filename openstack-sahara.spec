@@ -46,6 +46,7 @@ BuildRequires:    systemd-units
 BuildRequires:    python-zmq
 BuildRequires:    python-redis
 BuildRequires:    python-oslo-config >= 2:2.3.0
+BuildRequires:    python-castellan >= 0.3.1
 
 # test requirements
 BuildRequires:    python-testresources
@@ -105,6 +106,7 @@ Summary:          Sahara Python libraries
 Requires:         python-alembic >= 0.8.0
 Requires:         python-babel >= 1.3
 Requires:         python-barbicanclient >= 3.3.0
+Requires:         python-castellan >= 0.3.1
 Requires:         python-cinderclient >= 1.3.1
 Requires:         python-eventlet >= 0.17.4
 Requires:         python-flask >= 0.10

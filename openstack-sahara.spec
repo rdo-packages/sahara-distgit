@@ -185,6 +185,7 @@ exit 0
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/policy.json
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/rootwrap.conf
+%config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/api-paste.ini
 %config(noreplace) %{_sysconfdir}/sudoers.d/sahara-rootwrap
 %config(noreplace) %{_sysconfdir}/logrotate.d/openstack-sahara
 %{_sysconfdir}/sahara/rootwrap.d/
@@ -303,7 +304,7 @@ sphinx-build doc/source html
 rm -rf html/.{doctrees,buildinfo}
 
 PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
-sed -i 's#^\#api_paste_config.*#api_paste_config = /usr/share/sahara/api-paste.ini#' etc/sahara/sahara.conf
+sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' etc/sahara/sahara.conf
 
 %install
 %{__python2} setup.py install --skip-build --root %{buildroot}
@@ -311,7 +312,6 @@ sed -i 's#^\#api_paste_config.*#api_paste_config = /usr/share/sahara/api-paste.i
 install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-all.service
 install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-api.service
 install -p -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
-
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-sahara
 
 HOME=%{_sharedstatedir}/sahara
@@ -320,7 +320,14 @@ install -d -m 700 %{buildroot}$HOME
 install -p -D -m 640 etc/sahara/sahara.conf %{buildroot}%{_sysconfdir}/sahara/sahara.conf
 install -D -m 640 etc/sahara/policy.json %{buildroot}%{_sysconfdir}/sahara/policy.json
 install -p -D -m 640 etc/sahara/rootwrap.conf %{buildroot}%{_sysconfdir}/sahara/rootwrap.conf
+install -p -D -m 640 etc/sahara/api-paste.ini %{buildroot}%{_sysconfdir}/sahara/api-paste.ini
 install -p -D -m 640 etc/sudoers.d/sahara-rootwrap %{buildroot}%{_sysconfdir}/sudoers.d/sahara-rootwrap
+
+# Remove duplicate installations of config in share dir
+rm %{buildroot}%{_datarootdir}/sahara/sahara.conf
+rm %{buildroot}%{_datarootdir}/sahara/policy.json
+rm %{buildroot}%{_datarootdir}/sahara/rootwrap.conf
+rm %{buildroot}%{_datarootdir}/sahara/api-paste.ini
 
 # Install rootwrap files in /usr/share/sahara/rootwrap
 mkdir -p %{buildroot}%{_datarootdir}/sahara/rootwrap/

@@ -286,7 +286,7 @@ rm -rf {test-,}requirements.txt
 # remove the shbang from these files to suppress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
 for file in sahara/cli/*.py; do
-    sed -i 1,2d $file > $file.new &&
+    sed 1,2d $file > $file.new &&
     touch -r $file $file.new &&
     mv $file.new $file
 done

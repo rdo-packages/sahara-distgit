@@ -208,7 +208,7 @@ exit 0
 %package doc
 Group:         Documentation
 Summary:       Usage documentation for the Sahara cluster management API
-Requires:      %{name} = %{epoch}:%{version}-%{release}
+Requires:      openstack-sahara-common = %{epoch}:%{version}-%{release}
 
 %description doc
 Sahara provides the ability to elastically manage Apache Hadoop clusters on
@@ -218,6 +218,7 @@ install, use, and manage the Sahara infrastructure.
 %files doc
 %license LICENSE
 %{_pkgdocdir}/html
+%{_mandir}/man1
 
 ####################
 # openstack-engine #
@@ -304,6 +305,7 @@ export PYTHONPATH=$PWD:${PYTHONPATH}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
 sphinx-build doc/source html
 rm -rf html/.{doctrees,buildinfo}
+sphinx-build -b man doc/source build/man
 
 PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
 sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' etc/sahara/sahara.conf
@@ -345,6 +347,8 @@ mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 # Copy built doc files for doc subpackage
 mkdir -p %{buildroot}/%{_pkgdocdir}
 cp -rp html %{buildroot}/%{_pkgdocdir}
+mkdir -p %{buildroot}%{_mandir}/man1
+cp -rp build/man/*.1 %{buildroot}%{_mandir}/man1
 
 %check
 # FIXME: disabling tests in Rawhide until Sahara code is adapted to newest flake8

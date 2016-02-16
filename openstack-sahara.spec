@@ -41,6 +41,7 @@ BuildRequires:    python-oslo-sphinx >= 2.5.0
 BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 1.6
 BuildRequires:    systemd-units
+BuildRequires:    python-tooz >= 1.28.0
 
 # config generator
 BuildRequires:    python-zmq
@@ -139,6 +140,7 @@ Requires:         python-six >= 1.9.0
 Requires:         python-sqlalchemy >= 0.9.9
 Requires:         python-stevedore >= 1.5.0
 Requires:         python-swiftclient >= 2.2.0
+Requires:         python-tooz >= 1.28.0
 Requires:         python-webob >= 1.2.3
 
 %description -n python-sahara

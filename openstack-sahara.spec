@@ -197,6 +197,7 @@ exit 0
 %{_bindir}/sahara-db-manage
 %{_bindir}/sahara-rootwrap
 %{_bindir}/sahara-templates
+%{_bindir}/sahara-wsgi-api
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara
 %dir %attr(0750, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
 %{_datarootdir}/sahara/

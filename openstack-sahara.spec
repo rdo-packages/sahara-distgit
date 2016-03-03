@@ -152,6 +152,21 @@ OpenStack. This package contains the Sahara Python library.
 %license LICENSE
 %{python2_sitelib}/sahara
 %{python2_sitelib}/sahara-%{upstream_version}-py?.?.egg-info
+%exclude %{python2_sitelib}/%{service}/tests
+
+%package -n python-%{service}-tests
+Summary:        Sahara tests
+Requires:       openstack-%{service} = %{epoch}:%{version}-%{release}
+
+%description -n python-%{service}-tests
+Sahara provides the ability to elastically manage Apache Hadoop clusters on
+OpenStack. This package contains the Sahara Python library.
+
+This package contains the Sahara test files.
+
+%files -n python-%{service}-tests
+%license LICENSE
+%{python2_sitelib}/%{service}/tests
 
 ####################
 # openstack-common #

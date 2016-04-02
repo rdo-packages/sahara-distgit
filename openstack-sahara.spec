@@ -1,4 +1,4 @@
-%define milestone .0rc1
+%define milestone .0rc2
 #######################
 # Globals Declaration #
 #######################
@@ -23,12 +23,16 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       4.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       0.2%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{version}%{?milestone}.tar.gz
+#
+# patches_base=4.0.0.0rc2
+#
+
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -380,5 +384,8 @@ sh run_tests.sh --no-virtual-env
 #############
 
 %changelog
+* Sat Apr 02 2016 Haikel Guemar <hguemar@fedoraproject.org> 1:4.0.0-0.2.0rc2
+- Update to 4.0.0.0rc2
+
 * Thu Mar 24 2016 RDO <rdo-list@redhat.com> 4.0.0-0.1.0rc1
 - RC1 Rebuild for Mitaka RC1 rc1

@@ -2,7 +2,6 @@
 # Globals Declaration #
 #######################
 
-%global release_name liberty
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 

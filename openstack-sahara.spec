@@ -378,3 +378,4 @@ sh run_tests.sh --no-virtual-env
 #############
 
 %changelog
+# REMOVEME: error caused by commit 

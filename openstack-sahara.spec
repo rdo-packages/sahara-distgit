@@ -20,17 +20,13 @@ Name:          openstack-sahara
 # Liberty semver reset
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
-Version:       4.0.0
+Version:       4.0.1
 Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{version}%{?milestone}.tar.gz
-#
-# patches_base=4.0.0.0rc2
-#
-
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -382,6 +378,9 @@ sh run_tests.sh --no-virtual-env
 #############
 
 %changelog
+* Fri Jun 17 2016 Haikel Guemar <hguemar@fedoraproject.org> 1:4.0.1-1
+- Update to 4.0.1
+
 * Thu Apr  7 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 1:4.0.0-1
 - Upstream 4.0.0
 

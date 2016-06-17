@@ -2,13 +2,8 @@
 # Globals Declaration #
 #######################
 
-%global release_name liberty
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
-# commit used for the rebase
-%global commit cc218dd01f10b4cc1eaf00c7e86fac69e992c8bb
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-# git format-patch --no-renames --no-signature -N --ignore-submodules 94d6b69..liberty-patches
 
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
@@ -23,17 +18,13 @@
 
 Name:          openstack-sahara
 Epoch:         1
-Version:       3.0.0
-Release:       5.%{shortcommit}git%{?milestone}%{?dist}
+Version:       3.0.2
+Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-#Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
-# git clone git@github.com:openstack/sahara && cd sahara
-# git checkout cc218dd
-# PBR_VERSION=3.0.0-5.cc218ddgit python setup.py sdist
-Source0:       %{service}-%{version}-5.%{shortcommit}git.tar.gz
+Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -270,7 +261,7 @@ install, use, and manage the Sahara infrastructure.
 ######################
 
 %prep
-%setup -q -n sahara-%{version}-5.%{shortcommit}git
+%setup -q -n sahara-%{upstream_version}
 
 # let RPM handle deps
 rm -rf {test-,}requirements.txt
@@ -336,6 +327,9 @@ sh run_tests.sh --no-virtual-env
 #############
 
 %changelog
+* Fri Jun 17 2016 Haikel Guemar <hguemar@fedoraproject.org> 1:3.0.2-1
+- Update to 3.0.2
+
 * Mon Dec 21 2015 Haïkel Guémar <hguemar@fedoraproject.org> - 1:3.0.0-5
 - Rebase to latest commit from stable/liberty passing CI
 

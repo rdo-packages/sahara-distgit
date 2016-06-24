@@ -41,6 +41,7 @@ BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 1.6
 BuildRequires:    systemd-units
 BuildRequires:    python-tooz >= 1.28.0
+BuildRequires:    python-glanceclient
 
 # config generator
 BuildRequires:    python-zmq
@@ -110,6 +111,7 @@ Requires:         python-castellan >= 0.3.1
 Requires:         python-cinderclient >= 1.3.1
 Requires:         python-eventlet >= 0.17.4
 Requires:         python-flask >= 0.10
+Requires:         python-glanceclient >= 1:2.0.0
 Requires:         python-heatclient >= 0.3.0
 Requires:         python-iso8601 >= 0.1.9
 Requires:         python-jinja2 >= 2.6

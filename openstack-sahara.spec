@@ -372,7 +372,8 @@ cp -rp build/man/*.1 %{buildroot}%{_mandir}/man1
 %check
 # FIXME: disabling tests in Rawhide until Sahara code is adapted to newest flake8
 %if 0%{?fedora} < 24
-sh run_tests.sh --no-virtual-env
+export DISCOVER_DIRECTORY=sahara/tests/unit
+%{__python2} setup.py test
 %endif
 
 #############

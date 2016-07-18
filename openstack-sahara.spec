@@ -219,7 +219,6 @@ exit 0
 %dir %attr(0750, %{sahara_user}, %{sahara_group}) %{_localstatedir}/log/sahara
 %{_datarootdir}/sahara/
 # Note: permissions on sahara's home are intentionally 0700
-%dir %{_datadir}/sahara
 
 #################
 # openstack-doc #
@@ -371,11 +370,8 @@ mkdir -p %{buildroot}%{_mandir}/man1
 cp -rp build/man/*.1 %{buildroot}%{_mandir}/man1
 
 %check
-# TODO(egafford): Investigate cause of failure re: new plugin feature ASAP
-# %if 0%{?fedora} < 24
-# export DISCOVER_DIRECTORY=sahara/tests/unit
-# %{__python2} setup.py test
-# %endif
+export DISCOVER_DIRECTORY=sahara/tests/unit
+%{__python2} setup.py test
 
 #############
 # Changelog #

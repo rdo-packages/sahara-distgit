@@ -378,3 +378,4 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 #############
 
 %changelog
+# REMOVEME: error caused by commit 

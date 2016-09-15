@@ -1,3 +1,4 @@
+%global milestone .0b3
 #######################
 # Globals Declaration #
 #######################
@@ -20,8 +21,8 @@ Name:          openstack-sahara
 # Liberty semver reset
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
-Version:       XXX
-Release:       XXX
+Version:       5.0.0
+Release:       0.1%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -379,3 +380,6 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 #############
 
 %changelog
+* Thu Sep 15 2016 Haikel Guemar <hguemar@fedoraproject.org> 1:5.0.0-0.1
+- Update to 5.0.0.0b3
+

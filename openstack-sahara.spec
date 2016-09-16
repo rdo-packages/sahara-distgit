@@ -26,7 +26,7 @@ Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
-Source0:       http://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
+Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service

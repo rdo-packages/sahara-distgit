@@ -377,3 +377,4 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 #############
 
 %changelog
+# REMOVEME: error caused by commit http://git.openstack.org/cgit/openstack/sahara/commit/?id=bab906f6f0fb879fb709746ae60bc2322b3cb327

@@ -1,4 +1,3 @@
-%global milestone .0rc1
 #######################
 # Globals Declaration #
 #######################
@@ -22,16 +21,12 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       6.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
-#
-# patches_base=6.0.0.0rc1
-#
-
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-all.service
 Source3:       openstack-sahara-api.service
@@ -382,6 +377,9 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 #############
 
 %changelog
+* Wed Feb 22 2017 Alfredo Moralejo <amoralej@redhat.com> 1:6.0.0-1
+- Update to 6.0.0
+
 * Fri Feb 17 2017 Alfredo Moralejo <amoralej@redhat.com> 1:6.0.0-0.1.0rc1
 - Update to 6.0.0.0rc1
 

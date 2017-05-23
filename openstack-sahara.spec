@@ -20,7 +20,7 @@ Name:          openstack-sahara
 # Liberty semver reset
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
-Version:       4.1.0
+Version:       4.1.2
 Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -378,6 +378,9 @@ sh run_tests.sh --no-virtual-env
 #############
 
 %changelog
+* Tue May 23 2017 Alfredo Moralejo <amoralej@redhat.com> 1:4.1.2-1
+- Update to 4.1.2
+
 * Thu Sep 22 2016 Haikel Guemar <hguemar@fedoraproject.org> 1:4.1.0-1
 - Update to 4.1.0
 

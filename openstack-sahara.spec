@@ -36,7 +36,7 @@ BuildArch:     noarch
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-sphinx >= 1.1.2
-BuildRequires:    python-oslo-sphinx >= 2.5.0
+BuildRequires:    python-openstackdocstheme
 BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 1.6
 BuildRequires:    systemd-units
@@ -378,3 +378,4 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 #############
 
 %changelog
+# REMOVEME: error caused by commit http://git.openstack.org/cgit/openstack/sahara/commit/?id=ddc87b149f12e4fa739d6bd60a7bf51dfd7a7f21

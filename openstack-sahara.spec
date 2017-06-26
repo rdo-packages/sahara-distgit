@@ -36,7 +36,7 @@ BuildArch:     noarch
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-sphinx >= 1.1.2
-BuildRequires:    python-oslo-sphinx >= 2.5.0
+BuildRequires:    python-openstackdocstheme
 BuildRequires:    python-sphinxcontrib-httpdomain
 BuildRequires:    python-pbr >= 1.6
 BuildRequires:    systemd-units

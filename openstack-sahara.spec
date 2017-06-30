@@ -75,6 +75,7 @@ BuildRequires:    python-swiftclient >= 2.2.0
 BuildRequires:    python-oslo-utils >= 3.16.0
 BuildRequires:    python-routes
 BuildRequires:    python-pep8
+BuildRequires:    /usr/bin/ssh-keygen
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
@@ -144,6 +145,7 @@ Requires:         python-stevedore >= 1.17.1
 Requires:         python-swiftclient >= 3.2.0
 Requires:         python-tooz >= 1.47.0
 Requires:         python-webob >= 1.6.0
+Requires:         /usr/bin/ssh-keygen
 
 %description -n python-sahara
 Sahara provides the ability to elastically manage Apache Hadoop clusters on

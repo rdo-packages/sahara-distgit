@@ -33,6 +33,7 @@ Source3:       openstack-sahara-api.service
 Source4:       openstack-sahara-engine.service
 BuildArch:     noarch
 
+BuildRequires:    git
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-sphinx >= 1.1.2
@@ -300,7 +301,7 @@ install, use, and manage the Sahara infrastructure.
 ######################
 
 %prep
-%setup -q -n sahara-%{upstream_version}
+%autosetup -n sahara-%{upstream_version} -S git
 
 # let RPM handle deps
 rm -rf {test-,}requirements.txt

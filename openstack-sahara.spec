@@ -1,7 +1,3 @@
-#######################
-# Globals Declaration #
-#######################
-
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
@@ -12,10 +8,6 @@
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
 %endif
-
-####################
-# openstack-sahara #
-####################
 
 Name:          openstack-sahara
 # Liberty semver reset
@@ -98,10 +90,6 @@ OpenStack.
 %postun
 %systemd_postun_with_restart openstack-sahara-all.service
 
-#################
-# python-sahara #
-#################
-
 %package -n python-sahara
 Summary:          Sahara Python libraries
 
@@ -171,10 +159,6 @@ This package contains the Sahara test files.
 %license LICENSE
 %{python2_sitelib}/%{service}/tests
 
-####################
-# openstack-common #
-####################
-
 %package common
 Summary:          Components common to all Sahara services
 
@@ -222,9 +206,6 @@ exit 0
 # Note: permissions on sahara's home are intentionally 0700
 
 %if 0%{?with_doc}
-#################
-# openstack-doc #
-#################
 
 %package doc
 Group:         Documentation
@@ -245,10 +226,6 @@ install, use, and manage the Sahara infrastructure.
 %{_mandir}/man1
 
 %endif
-
-####################
-# openstack-engine #
-####################
 
 %package engine
 Summary:          The Sahara cluster management engine
@@ -273,10 +250,6 @@ install, use, and manage the Sahara infrastructure.
 %postun engine
 %systemd_postun_with_restart openstack-sahara-engine.service
 
-#################
-# openstack-api #
-#################
-
 %package api
 Summary:          The Sahara cluster management API
 
@@ -299,10 +272,6 @@ install, use, and manage the Sahara infrastructure.
 
 %postun api
 %systemd_postun_with_restart openstack-sahara-api.service
-
-######################
-# Common Build Steps #
-######################
 
 %prep
 %autosetup -n sahara-%{upstream_version} -S git
@@ -384,9 +353,5 @@ cp -rp build/man/*.1 %{buildroot}%{_mandir}/man1
 %check
 export DISCOVER_DIRECTORY=sahara/tests/unit
 %{__python2} setup.py test
-
-#############
-# Changelog #
-#############
 
 %changelog

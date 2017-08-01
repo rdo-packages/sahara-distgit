@@ -67,7 +67,6 @@ BuildRequires:    python-oslo-serialization >= 1.10.0
 BuildRequires:    python-swiftclient >= 2.2.0
 BuildRequires:    python-oslo-utils >= 3.16.0
 BuildRequires:    python-routes
-BuildRequires:    python-pep8
 BuildRequires:    /usr/bin/ssh-keygen
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}

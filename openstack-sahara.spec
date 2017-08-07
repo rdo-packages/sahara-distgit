@@ -304,7 +304,6 @@ chmod a+x sahara/plugins/spark/resources/topology.sh
 %{__python2} setup.py build
 
 
-export PYTHONPATH=$PWD:${PYTHONPATH}
 %if 0%{?with_doc}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
 sphinx-build doc/source html

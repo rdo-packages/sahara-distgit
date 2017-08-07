@@ -227,7 +227,7 @@ install, use, and manage the Sahara infrastructure.
 
 %files doc
 %license LICENSE
-%{_pkgdocdir}/html
+%doc doc/build/html
 %{_mandir}/man1
 
 %endif
@@ -304,12 +304,11 @@ chmod a+x sahara/plugins/spark/resources/topology.sh
 %{__python2} setup.py build
 
 
-export PYTHONPATH=$PWD:${PYTHONPATH}
 %if 0%{?with_doc}
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
-sphinx-build doc/source html
+%{__python2} setup.py build_sphinx -b html
 rm -rf html/.{doctrees,buildinfo}
-sphinx-build -b man doc/source build/man
+%{__python2} setup.py build_sphinx -b man
 %endif
 
 PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
@@ -350,11 +349,8 @@ done
 mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 
 %if 0%{?with_doc}
-# Copy built doc files for doc subpackage
-mkdir -p %{buildroot}/%{_pkgdocdir}
-cp -rp html %{buildroot}/%{_pkgdocdir}
 mkdir -p %{buildroot}%{_mandir}/man1
-cp -rp build/man/*.1 %{buildroot}%{_mandir}/man1
+install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 %endif
 
 %check

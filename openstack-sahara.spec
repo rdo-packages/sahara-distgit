@@ -6,6 +6,8 @@
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
 %global with_doc 1
+# guard for packages OSP does not ship
+%global rhosp 0
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
@@ -37,7 +39,9 @@ BuildRequires:    python-tooz >= 1.28.0
 BuildRequires:    python-glanceclient
 
 # config generator
+%if 0%{rhosp} == 0
 BuildRequires:    python-zmq
+%endif
 BuildRequires:    python-redis
 BuildRequires:    python-oslo-config >= 2:2.3.0
 BuildRequires:    python-castellan >= 0.3.1

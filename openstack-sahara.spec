@@ -171,9 +171,7 @@ This package contains the Sahara test files.
 Summary:          Components common to all Sahara services
 
 Requires:         python-sahara = %{epoch}:%{version}-%{release}
-Requires(post):   systemd
-Requires(preun):  systemd
-Requires(postun): systemd
+%{?systemd_requires}
 Requires(pre):    shadow-utils
 
 %description common

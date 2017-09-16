@@ -13,6 +13,10 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
 %endif
 
+%global common_desc \
+Sahara provides the ability to elastically manage Apache Hadoop clusters on \
+OpenStack.
+
 Name:          openstack-sahara
 # Liberty semver reset
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
@@ -78,8 +82,7 @@ Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-api = %{epoch}:%{version}-%{release}
 
 %description
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack.
+%{common_desc}
 
 %files
 %{_unitdir}/openstack-sahara-all.service
@@ -141,8 +144,8 @@ Requires:         python-webob >= 1.7.1
 Requires:         /usr/bin/ssh-keygen
 
 %description -n python-sahara
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. This package contains the Sahara Python library.
+%{common_desc}
+This package contains the Sahara Python library.
 
 %files -n python-sahara
 %doc README.rst
@@ -157,8 +160,8 @@ Summary:        Sahara tests
 Requires:       openstack-%{service} = %{epoch}:%{version}-%{release}
 
 %description -n python-%{service}-tests
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. This package contains the Sahara Python library.
+%{common_desc}
+This package contains the Sahara Python library.
 
 This package contains the Sahara test files.
 
@@ -175,8 +178,8 @@ Requires:         python-sahara = %{epoch}:%{version}-%{release}
 Requires(pre):    shadow-utils
 
 %description common
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. These components are common to all Sahara services.
+%{common_desc}
+These components are common to all Sahara services.
 
 %pre common
 # Origin: http://fedoraproject.org/wiki/Packaging:UsersAndGroups#Dynamic_allocation
@@ -223,8 +226,8 @@ BuildRequires:    python-openstackdocstheme
 BuildRequires:    python-sphinxcontrib-httpdomain
 
 %description doc
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. This documentation provides instructions and examples on how to
+%{common_desc}
+This documentation provides instructions and examples on how to
 install, use, and manage the Sahara infrastructure.
 
 %files doc
@@ -241,8 +244,8 @@ Summary:          The Sahara cluster management engine
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 
 %description engine
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. This documentation provides instructions and examples on how to
+%{common_desc}
+This documentation provides instructions and examples on how to
 install, use, and manage the Sahara infrastructure.
 
 %files engine
@@ -265,8 +268,8 @@ Summary:          The Sahara cluster management API
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 
 %description api
-Sahara provides the ability to elastically manage Apache Hadoop clusters on
-OpenStack. This documentation provides instructions and examples on how to
+%{common_desc}
+This documentation provides instructions and examples on how to
 install, use, and manage the Sahara infrastructure.
 
 %files api

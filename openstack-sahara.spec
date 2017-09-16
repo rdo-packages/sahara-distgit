@@ -40,6 +40,7 @@ BuildRequires:    python-setuptools
 BuildRequires:    python-pbr >= 1.6
 BuildRequires:    systemd-units
 BuildRequires:    python-tooz >= 1.28.0
+BuildRequires:    openstack-macros
 BuildRequires:    python-glanceclient
 
 # config generator
@@ -291,7 +292,7 @@ This package contains the Sahara API service.
 %autosetup -n sahara-%{upstream_version} -S git
 
 # let RPM handle deps
-rm -rf {test-,}requirements.txt
+%py_req_cleanup
 
 # remove the shbang from these files to suppress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.

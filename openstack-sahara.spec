@@ -335,12 +335,6 @@ install -p -D -m 640 etc/sahara/rootwrap.conf %{buildroot}%{_sysconfdir}/sahara/
 install -p -D -m 640 etc/sahara/api-paste.ini %{buildroot}%{_sysconfdir}/sahara/api-paste.ini
 install -p -D -m 440 etc/sudoers.d/sahara-rootwrap %{buildroot}%{_sysconfdir}/sudoers.d/sahara-rootwrap
 
-# Remove duplicate installations of config in share dir
-rm %{buildroot}%{_datarootdir}/sahara/sahara.conf
-rm %{buildroot}%{_datarootdir}/sahara/policy.json
-rm %{buildroot}%{_datarootdir}/sahara/rootwrap.conf
-rm %{buildroot}%{_datarootdir}/sahara/api-paste.ini
-
 # Install rootwrap files in /usr/share/sahara/rootwrap
 mkdir -p %{buildroot}%{_datarootdir}/sahara/rootwrap/
 install -p -D -m 644 etc/sahara/rootwrap.d/* %{buildroot}%{_datarootdir}/sahara/rootwrap/

@@ -365,3 +365,4 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 %{__python2} setup.py test
 
 %changelog
+# REMOVEME: error caused by commit http://git.openstack.org/cgit/openstack/sahara/commit/?id=ccf6da924c63ca20d83d497d0bb9688ef9b879d1

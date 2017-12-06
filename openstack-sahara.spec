@@ -88,7 +88,6 @@ Requires:         openstack-sahara-api = %{epoch}:%{version}-%{release}
 %files
 %{_unitdir}/openstack-sahara-all.service
 %{_bindir}/sahara-all
-%{_bindir}/sahara-image-pack
 
 %post
 %systemd_post openstack-sahara-all.service
@@ -286,6 +285,22 @@ This package contains the Sahara API service.
 
 %postun api
 %systemd_postun_with_restart openstack-sahara-api.service
+
+
+%package image-pack
+Summary:          Sahara Image Pack
+
+Requires:         python-sahara = %{epoch}:%{version}-%{release}
+Requires:         python-libguestfs
+
+%description image-pack
+%{common_desc}
+
+This package contains the sahara-image-pack program.
+
+%files image-pack
+%{_bindir}/sahara-image-pack
+
 
 %prep
 %autosetup -n sahara-%{upstream_version} -S git

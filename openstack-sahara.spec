@@ -56,6 +56,7 @@ BuildRequires:    python-testresources
 BuildRequires:    python-oslotest
 BuildRequires:    python-hacking
 BuildRequires:    python-alembic
+BuildRequires:    python-botocore >= 1.4
 BuildRequires:    python-cinderclient >= 1.6.0
 BuildRequires:    python-flask >= 0.10
 BuildRequires:    python-heatclient >= 1.4.0
@@ -105,6 +106,7 @@ Summary:          Sahara Python libraries
 
 Requires:         python-alembic >= 0.8.7
 Requires:         python-babel >= 2.3.4
+Requires:         python-botocore >= 1.4
 Requires:         python-castellan >= 0.7.0
 Requires:         python-cinderclient >= 3.1.0
 Requires:         python-eventlet >= 0.18.2

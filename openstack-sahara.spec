@@ -38,7 +38,7 @@ BuildRequires:    git
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-pbr >= 1.6
-BuildRequires:    systemd-units
+BuildRequires:    systemd
 BuildRequires:    python-tooz >= 1.28.0
 BuildRequires:    openstack-macros
 BuildRequires:    python-glanceclient

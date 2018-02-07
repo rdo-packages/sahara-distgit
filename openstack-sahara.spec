@@ -53,6 +53,7 @@ BuildRequires:    python-castellan >= 0.3.1
 
 # test requirements
 BuildRequires:    python-testresources
+BuildRequires:    python-testscenarios
 BuildRequires:    python-oslotest
 BuildRequires:    python-hacking
 BuildRequires:    python-alembic

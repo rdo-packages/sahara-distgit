@@ -331,10 +331,11 @@ chmod a+x sahara/plugins/spark/resources/topology.sh
 
 
 %if 0%{?with_doc}
+export PYTHONPATH=.
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
-%{__python2} setup.py build_sphinx -b html
-rm -rf html/.{doctrees,buildinfo}
-%{__python2} setup.py build_sphinx -b man
+sphinx-build -W -b html doc/source doc/build/html
+rm -rf doc/build/html/.{doctrees,buildinfo}
+sphinx-build -W -b man doc/source doc/build/man
 %endif
 
 PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf

@@ -37,7 +37,7 @@ BuildArch:     noarch
 BuildRequires:    git
 BuildRequires:    python2-devel
 BuildRequires:    python2-setuptools
-BuildRequires:    python2-pbr >= 1.6
+BuildRequires:    python2-pbr >= 2.0.0
 BuildRequires:    systemd
 BuildRequires:    python2-tooz >= 1.58.0
 BuildRequires:    openstack-macros
@@ -48,7 +48,7 @@ BuildRequires:    python2-glanceclient
 BuildRequires:    python-zmq
 %endif
 BuildRequires:    python-redis
-BuildRequires:    python2-oslo-config >= 2:5.1.0
+BuildRequires:    python2-oslo-config >= 2:5.2.0
 BuildRequires:    python2-castellan >= 0.16.0
 
 # test requirements
@@ -59,23 +59,23 @@ BuildRequires:    python2-hacking
 BuildRequires:    python2-alembic
 BuildRequires:    python2-botocore >= 1.5.1
 BuildRequires:    python2-cinderclient >= 3.3.0
-BuildRequires:    python-flask >= 0.10
+BuildRequires:    python-flask >= 1:1.0.2
 BuildRequires:    python2-heatclient >= 1.10.0
 BuildRequires:    python2-jsonschema >= 2.6.0
-BuildRequires:    python2-keystoneclient >= 1:2.0.0
+BuildRequires:    python2-keystoneclient >= 1:3.8.0
 BuildRequires:    python2-keystonemiddleware >= 4.17.0
-BuildRequires:    python2-paramiko >= 1.13.0
+BuildRequires:    python2-paramiko >= 2.0.0
 BuildRequires:    python2-manilaclient >= 1.16.0
-BuildRequires:    python2-neutronclient >= 6.3.0
+BuildRequires:    python2-neutronclient >= 6.7.0
 BuildRequires:    python2-novaclient >= 9.1.0
-BuildRequires:    python2-oslo-concurrency >= 3.25.0
+BuildRequires:    python2-oslo-concurrency >= 3.26.0
 BuildRequires:    python2-oslo-db >= 4.27.0
 BuildRequires:    python2-oslo-i18n >= 3.15.3
 BuildRequires:    python2-oslo-log >= 3.36.0
 BuildRequires:    python2-oslo-messaging >= 5.29.0
 BuildRequires:    python2-oslo-policy >= 1.30.0
 BuildRequires:    python2-oslo-serialization >= 2.18.0
-BuildRequires:    python2-swiftclient >= 2.2.0
+BuildRequires:    python2-swiftclient >= 3.2.0
 BuildRequires:    python2-oslo-utils >= 3.33.0
 BuildRequires:    python2-routes
 BuildRequires:    /usr/bin/ssh-keygen
@@ -111,20 +111,20 @@ Requires:         python2-botocore >= 1.5.1
 Requires:         python2-castellan >= 0.16.0
 Requires:         python2-cinderclient >= 3.3.0
 Requires:         python2-eventlet >= 0.18.2
-Requires:         python-flask >= 0.10
+Requires:         python-flask >= 1:1.0.2
 Requires:         python2-glanceclient >= 2.8.0
 Requires:         python2-heatclient >= 1.10.0
 Requires:         python2-iso8601 >= 0.1.11
-Requires:         python2-jinja2 >= 2.8
+Requires:         python2-jinja2 >= 2.10
 Requires:         python2-jsonschema >= 2.6.0
-Requires:         python2-keystoneauth1 >= 3.3.0
+Requires:         python2-keystoneauth1 >= 3.4.0
 Requires:         python2-keystoneclient >= 1:3.8.0
 Requires:         python2-keystonemiddleware >= 4.17.0
 Requires:         python2-manilaclient >= 1.16.0
-Requires:         python2-neutronclient >= 6.3.0
+Requires:         python2-neutronclient >= 6.7.0
 Requires:         python2-novaclient >= 9.1.0
-Requires:         python2-oslo-concurrency >= 3.25.0
-Requires:         python2-oslo-config >= 2:5.1.0
+Requires:         python2-oslo-concurrency >= 3.26.0
+Requires:         python2-oslo-config >= 2:5.2.0
 Requires:         python2-oslo-context >= 2.19.2
 Requires:         python2-oslo-db >= 4.27.0
 Requires:         python2-oslo-i18n >= 3.15.3
@@ -136,7 +136,7 @@ Requires:         python2-oslo-rootwrap >= 5.8.0
 Requires:         python2-oslo-serialization >= 2.18.0
 Requires:         python2-oslo-service >= 1.24.0
 Requires:         python2-oslo-utils >= 3.33.0
-Requires:         python2-paramiko >= 2.0
+Requires:         python2-paramiko >= 2.0.0
 Requires:         python2-pbr >= 2.0.0
 Requires:         python2-requests >= 2.14.2
 Requires:         python2-six >= 1.10.0
@@ -225,8 +225,8 @@ exit 0
 Group:         Documentation
 Summary:       Usage documentation for the Sahara cluster management API
 Requires:      openstack-sahara-common = %{epoch}:%{version}-%{release}
-BuildRequires:    python-sphinx >= 1.1.2
-BuildRequires:    python-openstackdocstheme
+BuildRequires:    python-sphinx >= 1.6.2
+BuildRequires:    python-openstackdocstheme >= 1.18.1
 BuildRequires:    python-sphinxcontrib-httpdomain
 
 %description doc

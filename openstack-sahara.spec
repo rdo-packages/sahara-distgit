@@ -52,7 +52,9 @@ BuildRequires:    python2-oslo-config >= 2:5.2.0
 BuildRequires:    python2-castellan >= 0.16.0
 
 # test requirements
-BuildRequires:    python2-testresources
+# python2-testtools still required by oslo.db tests
+BuildRequires:    python2-testtools
+BuildRequires:    python2-stestr >= 1.0.0
 BuildRequires:    python2-testscenarios
 BuildRequires:    python2-oslotest
 BuildRequires:    python2-hacking
@@ -379,7 +381,12 @@ install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 %check
 # Remove hacking tests, we don't need them
 rm sahara/tests/unit/utils/test_hacking.py
-export DISCOVER_DIRECTORY=sahara/tests/unit
-%{__python2} setup.py test
+export PATH=$PATH:$RPM_BUILD_ROOT/usr/bin
+export PYTHONPATH=$PWD
+stestr run
+%if 0%{?with_python3}
+rm -rf .stestr
+stestr-3 run
+%endif
 
 %changelog

@@ -380,6 +380,6 @@ install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 # Remove hacking tests, we don't need them
 rm sahara/tests/unit/utils/test_hacking.py
 export DISCOVER_DIRECTORY=sahara/tests/unit
-%{__python2} setup.py test
+stestr run
 
 %changelog

@@ -1,3 +1,14 @@
+# Macros for py2/py3 compatibility
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global pyver %{python3_pkgversion}
+%else
+%global pyver 2
+%endif
+%global pyver_bin python%{pyver}
+%global pyver_sitelib %python%{pyver}_sitelib
+%global pyver_install %py%{pyver}_install
+%global pyver_build %py%{pyver}_build
+# End of macros for py2/py3 compatibility
 # Globals Declaration
 
 %global service sahara
@@ -35,52 +46,64 @@ Source4:       openstack-sahara-engine.service
 BuildArch:     noarch
 
 BuildRequires:    git
-BuildRequires:    python2-devel
-BuildRequires:    python2-setuptools
-BuildRequires:    python2-pbr >= 2.0.0
+BuildRequires:    python%{pyver}-devel
+BuildRequires:    python%{pyver}-setuptools
+BuildRequires:    python%{pyver}-pbr >= 2.0.0
 BuildRequires:    systemd
-BuildRequires:    python2-tooz >= 1.58.0
+BuildRequires:    python%{pyver}-tooz >= 1.58.0
 BuildRequires:    openstack-macros
-BuildRequires:    python2-glanceclient
+BuildRequires:    python%{pyver}-glanceclient
 
 # config generator
+BuildRequires:    python%{pyver}-oslo-config >= 2:5.2.0
+BuildRequires:    python%{pyver}-castellan >= 0.16.0
+
+# test requirements
+# python2-testresources still required by oslo.db tests
+BuildRequires:    python%{pyver}-testresources
+BuildRequires:    python%{pyver}-stestr >= 1.0.0
+BuildRequires:    python%{pyver}-testscenarios
+BuildRequires:    python%{pyver}-oslotest
+BuildRequires:    python%{pyver}-hacking
+BuildRequires:    python%{pyver}-alembic
+BuildRequires:    python%{pyver}-botocore >= 1.5.1
+BuildRequires:    python%{pyver}-cinderclient >= 3.3.0
+BuildRequires:    python%{pyver}-heatclient >= 1.10.0
+BuildRequires:    python%{pyver}-jsonschema >= 2.6.0
+BuildRequires:    python%{pyver}-keystoneclient >= 1:3.8.0
+BuildRequires:    python%{pyver}-keystonemiddleware >= 4.17.0
+BuildRequires:    python%{pyver}-paramiko >= 2.0.0
+BuildRequires:    python%{pyver}-manilaclient >= 1.16.0
+BuildRequires:    python%{pyver}-neutronclient >= 6.7.0
+BuildRequires:    python%{pyver}-novaclient >= 9.1.0
+BuildRequires:    python%{pyver}-oslo-concurrency >= 3.26.0
+BuildRequires:    python%{pyver}-oslo-db >= 4.27.0
+BuildRequires:    python%{pyver}-oslo-i18n >= 3.15.3
+BuildRequires:    python%{pyver}-oslo-log >= 3.36.0
+BuildRequires:    python%{pyver}-oslo-messaging >= 5.29.0
+BuildRequires:    python%{pyver}-oslo-policy >= 1.30.0
+BuildRequires:    python%{pyver}-oslo-serialization >= 2.18.0
+BuildRequires:    python%{pyver}-swiftclient >= 3.2.0
+BuildRequires:    python%{pyver}-oslo-utils >= 3.33.0
+BuildRequires:    python%{pyver}-routes
+BuildRequires:    /usr/bin/ssh-keygen
+
+# Handle python2 exception
+%if %{pyver} == 2
 %if 0%{rhosp} == 0
 BuildRequires:    python-zmq
 %endif
 BuildRequires:    python-redis
-BuildRequires:    python2-oslo-config >= 2:5.2.0
-BuildRequires:    python2-castellan >= 0.16.0
-
-# test requirements
-# python2-testresources still required by oslo.db tests
-BuildRequires:    python2-testresources
-BuildRequires:    python2-stestr >= 1.0.0
-BuildRequires:    python2-testscenarios
-BuildRequires:    python2-oslotest
-BuildRequires:    python2-hacking
-BuildRequires:    python2-alembic
-BuildRequires:    python2-botocore >= 1.5.1
-BuildRequires:    python2-cinderclient >= 3.3.0
 BuildRequires:    python-flask >= 1:1.0.2
-BuildRequires:    python2-heatclient >= 1.10.0
-BuildRequires:    python2-jsonschema >= 2.6.0
-BuildRequires:    python2-keystoneclient >= 1:3.8.0
-BuildRequires:    python2-keystonemiddleware >= 4.17.0
-BuildRequires:    python2-paramiko >= 2.0.0
-BuildRequires:    python2-manilaclient >= 1.16.0
-BuildRequires:    python2-neutronclient >= 6.7.0
-BuildRequires:    python2-novaclient >= 9.1.0
-BuildRequires:    python2-oslo-concurrency >= 3.26.0
-BuildRequires:    python2-oslo-db >= 4.27.0
-BuildRequires:    python2-oslo-i18n >= 3.15.3
-BuildRequires:    python2-oslo-log >= 3.36.0
-BuildRequires:    python2-oslo-messaging >= 5.29.0
-BuildRequires:    python2-oslo-policy >= 1.30.0
-BuildRequires:    python2-oslo-serialization >= 2.18.0
-BuildRequires:    python2-swiftclient >= 3.2.0
-BuildRequires:    python2-oslo-utils >= 3.33.0
-BuildRequires:    python2-routes
-BuildRequires:    /usr/bin/ssh-keygen
+BuildRequires:    python-sphinxcontrib-httpdomain
+%else
+%if 0%{rhosp} == 0
+BuildRequires:    python%{pyver}-zmq
+%endif
+BuildRequires:    python%{pyver}-redis
+BuildRequires:    python%{pyver}-flask >= 1:1.0.2
+BuildRequires:    python%{pyver}-sphinxcontrib-httpdomain
+%endif
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
@@ -104,82 +127,92 @@ Requires:         openstack-sahara-image-pack = %{epoch}:%{version}-%{release}
 %systemd_postun_with_restart openstack-sahara-all.service
 
 
-%package -n python-sahara
+%package -n python%{pyver}-sahara
 Summary:          Sahara Python libraries
+%{?python_provide:%python_provide python%{pyver}-sahara}
 
-Requires:         python2-alembic >= 0.8.10
-Requires:         python2-babel >= 2.3.4
-Requires:         python2-botocore >= 1.5.1
-Requires:         python2-castellan >= 0.16.0
-Requires:         python2-cinderclient >= 3.3.0
-Requires:         python2-eventlet >= 0.18.2
-Requires:         python-flask >= 1:1.0.2
-Requires:         python2-glanceclient >= 2.8.0
-Requires:         python2-heatclient >= 1.10.0
-Requires:         python2-iso8601 >= 0.1.11
-Requires:         python2-jinja2 >= 2.10
-Requires:         python2-jsonschema >= 2.6.0
-Requires:         python2-keystoneauth1 >= 3.4.0
-Requires:         python2-keystoneclient >= 1:3.8.0
-Requires:         python2-keystonemiddleware >= 4.17.0
-Requires:         python2-manilaclient >= 1.16.0
-Requires:         python2-neutronclient >= 6.7.0
-Requires:         python2-novaclient >= 9.1.0
-Requires:         python2-oslo-concurrency >= 3.26.0
-Requires:         python2-oslo-config >= 2:5.2.0
-Requires:         python2-oslo-context >= 2.19.2
-Requires:         python2-oslo-db >= 4.27.0
-Requires:         python2-oslo-i18n >= 3.15.3
-Requires:         python2-oslo-log >= 3.36.0
-Requires:         python2-oslo-messaging >= 5.29.0
-Requires:         python2-oslo-middleware >= 3.31.0
-Requires:         python2-oslo-policy >= 1.30.0
-Requires:         python2-oslo-rootwrap >= 5.8.0
-Requires:         python2-oslo-serialization >= 2.18.0
-Requires:         python2-oslo-service >= 1.24.0
-Requires:         python2-oslo-utils >= 3.33.0
-Requires:         python2-paramiko >= 2.0.0
-Requires:         python2-pbr >= 2.0.0
-Requires:         python2-requests >= 2.14.2
-Requires:         python2-six >= 1.10.0
-Requires:         python2-sqlalchemy >= 1.0.10
-Requires:         python2-stevedore >= 1.20.0
-Requires:         python2-swiftclient >= 3.2.0
-Requires:         python2-tooz >= 1.58.0
-Requires:         python-webob >= 1.7.1
+Requires:         python%{pyver}-alembic >= 0.8.10
+Requires:         python%{pyver}-babel >= 2.3.4
+Requires:         python%{pyver}-botocore >= 1.5.1
+Requires:         python%{pyver}-castellan >= 0.16.0
+Requires:         python%{pyver}-cinderclient >= 3.3.0
+Requires:         python%{pyver}-eventlet >= 0.18.2
+Requires:         python%{pyver}-glanceclient >= 2.8.0
+Requires:         python%{pyver}-heatclient >= 1.10.0
+Requires:         python%{pyver}-iso8601 >= 0.1.11
+Requires:         python%{pyver}-jinja2 >= 2.10
+Requires:         python%{pyver}-jsonschema >= 2.6.0
+Requires:         python%{pyver}-keystoneauth1 >= 3.4.0
+Requires:         python%{pyver}-keystoneclient >= 1:3.8.0
+Requires:         python%{pyver}-keystonemiddleware >= 4.17.0
+Requires:         python%{pyver}-manilaclient >= 1.16.0
+Requires:         python%{pyver}-neutronclient >= 6.7.0
+Requires:         python%{pyver}-novaclient >= 9.1.0
+Requires:         python%{pyver}-oslo-concurrency >= 3.26.0
+Requires:         python%{pyver}-oslo-config >= 2:5.2.0
+Requires:         python%{pyver}-oslo-context >= 2.19.2
+Requires:         python%{pyver}-oslo-db >= 4.27.0
+Requires:         python%{pyver}-oslo-i18n >= 3.15.3
+Requires:         python%{pyver}-oslo-log >= 3.36.0
+Requires:         python%{pyver}-oslo-messaging >= 5.29.0
+Requires:         python%{pyver}-oslo-middleware >= 3.31.0
+Requires:         python%{pyver}-oslo-policy >= 1.30.0
+Requires:         python%{pyver}-oslo-rootwrap >= 5.8.0
+Requires:         python%{pyver}-oslo-serialization >= 2.18.0
+Requires:         python%{pyver}-oslo-service >= 1.24.0
+Requires:         python%{pyver}-oslo-utils >= 3.33.0
+Requires:         python%{pyver}-paramiko >= 2.0.0
+Requires:         python%{pyver}-pbr >= 2.0.0
+Requires:         python%{pyver}-requests >= 2.14.2
+Requires:         python%{pyver}-six >= 1.10.0
+Requires:         python%{pyver}-sqlalchemy >= 1.0.10
+Requires:         python%{pyver}-stevedore >= 1.20.0
+Requires:         python%{pyver}-swiftclient >= 3.2.0
+Requires:         python%{pyver}-tooz >= 1.58.0
+Requires:         python%{pyver}-webob >= 1.7.1
 Requires:         /usr/bin/ssh-keygen
 
-%description -n python-sahara
+# Handle python2 exception
+%if %{pyver} == 2
+Requires:         python-flask >= 1:1.0.2
+Requires:         python-libguestfs
+%else
+Requires:         python%{pyver}-flask >= 1:1.0.2
+Requires:         python%{pyver}-libguestfs
+%endif
+
+%description -n python%{pyver}-sahara
 %{common_desc}
 
 This package contains the Sahara Python library.
 
-%files -n python-sahara
+%files -n python%{pyver}-sahara
 %doc README.rst
 %license LICENSE
-%{python2_sitelib}/sahara
-%{python2_sitelib}/sahara-%{upstream_version}-py?.?.egg-info
-%exclude %{python2_sitelib}/%{service}/tests
+%{pyver_sitelib}/sahara
+%{pyver_sitelib}/sahara-%{upstream_version}-py?.?.egg-info
+%exclude %{pyver_sitelib}/%{service}/tests
 
 
-%package -n python-%{service}-tests
+%package -n python%{pyver}-%{service}-tests
 Summary:        Sahara tests
+%{?python_provide:%python_provide python%{pyver}-%{service}-tests}
 Requires:       openstack-%{service} = %{epoch}:%{version}-%{release}
 
-%description -n python-%{service}-tests
+%description -n python%{pyver}-%{service}-tests
 %{common_desc}
 
 This package contains the Sahara test files.
 
-%files -n python-%{service}-tests
+%files -n python%{pyver}-%{service}-tests
 %license LICENSE
-%{python2_sitelib}/%{service}/tests
+%{pyver_sitelib}/%{service}/tests
 
 
 %package common
 Summary:          Components common to all Sahara services
 
-Requires:         python-sahara = %{epoch}:%{version}-%{release}
+Requires:         python%{pyver}-sahara = %{epoch}:%{version}-%{release}
 %{?systemd_requires}
 Requires(pre):    shadow-utils
 
@@ -227,9 +260,16 @@ exit 0
 Group:         Documentation
 Summary:       Usage documentation for the Sahara cluster management API
 Requires:      openstack-sahara-common = %{epoch}:%{version}-%{release}
-BuildRequires:    python-sphinx >= 1.6.2
-BuildRequires:    python-openstackdocstheme >= 1.18.1
+BuildRequires:    python%{pyver}-sphinx >= 1.6.2
+BuildRequires:    python%{pyver}-openstackdocstheme >= 1.18.1
+
+# Handle python2 exception
+%if %{pyver} == 2
 BuildRequires:    python-sphinxcontrib-httpdomain
+%else
+BuildRequires:    python%{pyver}-sphinxcontrib-httpdomain
+%endif
+
 
 %description doc
 %{common_desc}
@@ -296,8 +336,13 @@ This package contains the Sahara API service.
 %package image-pack
 Summary:          Sahara Image Pack
 
-Requires:         python-sahara = %{epoch}:%{version}-%{release}
+Requires:         python%{pyver}-sahara = %{epoch}:%{version}-%{release}
+# Handle python2 exception
+%if %{pyver} == 2
 Requires:         python-libguestfs
+%else
+Requires:         python%{pyver}-libguestfs
+%endif
 
 %description image-pack
 %{common_desc}
@@ -329,22 +374,22 @@ chmod a+x sahara/plugins/spark/resources/spark-env.sh.template
 chmod a+x sahara/plugins/spark/resources/topology.sh
 
 %build
-%{__python2} setup.py build
+%{pyver_build}
 
 
 %if 0%{?with_doc}
 export PYTHONPATH=.
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
-sphinx-build -W -b html doc/source doc/build/html
+sphinx-build-%{pyver} -W -b html doc/source doc/build/html
 rm -rf doc/build/html/.{doctrees,buildinfo}
-sphinx-build -W -b man doc/source doc/build/man
+sphinx-build-%{pyver} -W -b man doc/source doc/build/man
 %endif
 
-PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
+PYTHONPATH=. oslo-config-generator-%{pyver} --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
 sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' etc/sahara/sahara.conf
 
 %install
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%{pyver_install}
 
 install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-all.service
 install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-api.service
@@ -383,10 +428,6 @@ install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 rm sahara/tests/unit/utils/test_hacking.py
 export PATH=$PATH:$RPM_BUILD_ROOT/usr/bin
 export PYTHONPATH=$PWD
-stestr run
-%if 0%{?with_python3}
-rm -rf .stestr
-stestr-3 run
-%endif
+stestr-%{pyver} run
 
 %changelog

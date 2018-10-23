@@ -83,6 +83,7 @@ BuildRequires:    python%{pyver}-oslo-log >= 3.36.0
 BuildRequires:    python%{pyver}-oslo-messaging >= 5.29.0
 BuildRequires:    python%{pyver}-oslo-policy >= 1.30.0
 BuildRequires:    python%{pyver}-oslo-serialization >= 2.18.0
+BuildRequires:    python%{pyver}-oslo-upgradecheck >= 0.1.0
 BuildRequires:    python%{pyver}-swiftclient >= 3.2.0
 BuildRequires:    python%{pyver}-oslo-utils >= 3.33.0
 BuildRequires:    python%{pyver}-routes
@@ -160,6 +161,7 @@ Requires:         python%{pyver}-oslo-policy >= 1.30.0
 Requires:         python%{pyver}-oslo-rootwrap >= 5.8.0
 Requires:         python%{pyver}-oslo-serialization >= 2.18.0
 Requires:         python%{pyver}-oslo-service >= 1.24.0
+Requires:         python%{pyver}-oslo-upgradecheck >= 0.1.0
 Requires:         python%{pyver}-oslo-utils >= 3.33.0
 Requires:         python%{pyver}-paramiko >= 2.0.0
 Requires:         python%{pyver}-pbr >= 2.0.0
@@ -246,6 +248,7 @@ exit 0
 %{_bindir}/_sahara-subprocess
 %{_bindir}/sahara-db-manage
 %{_bindir}/sahara-rootwrap
+%{_bindir}/sahara-status
 %{_bindir}/sahara-templates
 %{_bindir}/sahara-wsgi-api
 %dir %attr(-, %{sahara_user}, %{sahara_group}) %{_sharedstatedir}/sahara

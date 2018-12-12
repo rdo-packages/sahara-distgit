@@ -434,3 +434,4 @@ export PYTHONPATH=$PWD
 stestr-%{pyver} run
 
 %changelog
+# REMOVEME: error caused by commit http://git.openstack.org/cgit/openstack/sahara/commit/?id=0b8ab036e7a4b1beedbc8bcd2d33736a9e296536

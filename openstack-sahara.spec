@@ -375,12 +375,6 @@ for file in sahara/cli/*.py; do
     touch -r $file $file.new &&
     mv $file.new $file
 done
-# set executable on these files to suppress rpmlint warnings, they are used as
-# templates to create shell scripts.
-chmod a+x sahara/plugins/vanilla/hadoop2/resources/post_conf.template
-chmod a+x sahara/plugins/spark/resources/spark-env.sh.template
-# also set executable on this topology script, should have been set upstream
-chmod a+x sahara/plugins/spark/resources/topology.sh
 
 %build
 %{pyver_build}

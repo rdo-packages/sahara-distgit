@@ -21,7 +21,7 @@ Name:          openstack-sahara
 # Liberty semver reset
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
-Version:       9.0.0
+Version:       9.0.1
 Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
@@ -392,6 +392,9 @@ stestr-3 run
 %endif
 
 %changelog
+* Tue Jan 15 2019 RDO <dev@lists.rdoproject.org> 1:9.0.1-1
+- Update to 9.0.1
+
 * Thu Aug 30 2018 RDO <dev@lists.rdoproject.org> 1:9.0.0-1
 - Update to 9.0.0
 

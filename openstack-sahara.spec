@@ -40,9 +40,8 @@ License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 Source1:       sahara.logrotate
-Source2:       openstack-sahara-all.service
-Source3:       openstack-sahara-api.service
-Source4:       openstack-sahara-engine.service
+Source2:       openstack-sahara-api.service
+Source3:       openstack-sahara-engine.service
 BuildArch:     noarch
 
 BuildRequires:    git
@@ -116,17 +115,8 @@ Requires:         openstack-sahara-image-pack = %{epoch}:%{version}-%{release}
 %{common_desc}
 
 %files
-%{_unitdir}/openstack-sahara-all.service
-%{_bindir}/sahara-all
-
-%post
-%systemd_post openstack-sahara-all.service
-
-%preun
-%systemd_preun openstack-sahara-all.service
-
-%postun
-%systemd_postun_with_restart openstack-sahara-all.service
+%doc README.rst
+%license LICENSE
 
 
 %package -n python%{pyver}-sahara
@@ -408,9 +398,8 @@ sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' e
 %install
 %{pyver_install}
 
-install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-all.service
-install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-api.service
-install -p -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
+install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-api.service
+install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-sahara
 
 HOME=%{_sharedstatedir}/sahara
@@ -420,6 +409,10 @@ install -p -D -m 640 etc/sahara/sahara.conf %{buildroot}%{_sysconfdir}/sahara/sa
 install -p -D -m 640 etc/sahara/rootwrap.conf %{buildroot}%{_sysconfdir}/sahara/rootwrap.conf
 install -p -D -m 640 etc/sahara/api-paste.ini %{buildroot}%{_sysconfdir}/sahara/api-paste.ini
 install -p -D -m 440 etc/sudoers.d/sahara-rootwrap %{buildroot}%{_sysconfdir}/sudoers.d/sahara-rootwrap
+
+# sahara-all is deprecated upstream, probably broken and
+# thus not packaged anymore
+rm -f %{buildroot}%{_prefix}/bin/sahara-all
 
 # Remove duplicate installations of config files
 rm -rf %{buildroot}%{_prefix}/etc

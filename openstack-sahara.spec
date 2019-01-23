@@ -97,14 +97,12 @@ BuildRequires:    python-zmq
 %endif
 BuildRequires:    python-redis
 BuildRequires:    python-flask >= 1:1.0.2
-BuildRequires:    python-sphinxcontrib-httpdomain
 %else
 %if 0%{rhosp} == 0
 BuildRequires:    python%{pyver}-zmq
 %endif
 BuildRequires:    python%{pyver}-redis
 BuildRequires:    python%{pyver}-flask >= 1:1.0.2
-BuildRequires:    python%{pyver}-sphinxcontrib-httpdomain
 %endif
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}

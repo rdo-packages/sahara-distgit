@@ -89,7 +89,9 @@ BuildRequires:    python%{pyver}-swiftclient >= 3.2.0
 BuildRequires:    python%{pyver}-oslo-utils >= 3.33.0
 BuildRequires:    python%{pyver}-routes
 BuildRequires:    /usr/bin/ssh-keygen
-
+%if %{pyver} == 3
+BuildRequires:  /usr/bin/pathfix.py
+%endif
 # Handle python2 exception
 %if %{pyver} == 2
 %if 0%{rhosp} == 0
@@ -418,6 +420,12 @@ ln -s %{_datarootdir}/sahara/rootwrap/$(basename $filter) %{buildroot}%{_sysconf
 done
 
 mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
+
+# Fix ambiguous shebangs
+# NOTE(jpena): once the sahara plugins are removed, this will need to be removed too
+%if %{pyver} == 3
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{pyver_sitelib}/sahara/plugins/
+%endif
 
 %if 0%{?with_doc}
 mkdir -p %{buildroot}%{_mandir}/man1

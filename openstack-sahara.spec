@@ -337,6 +337,20 @@ Summary:          The Sahara cluster management API
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 
+# When weak dependencies are not available, enforce the dependencies
+# on the plugins; when the weak dependencies are available,
+# each plugin package "supplements" openstack-sahara-api and
+# it is magically installed with openstack-sahara-api
+# (but it can be removed later).
+%if 0%{?rhel} && 0%{?rhel} <= 7
+Requires:         python%{pyver}-sahara-plugin-ambari
+Requires:         python%{pyver}-sahara-plugin-cdh
+Requires:         python%{pyver}-sahara-plugin-mapr
+Requires:         python%{pyver}-sahara-plugin-spark
+Requires:         python%{pyver}-sahara-plugin-storm
+Requires:         python%{pyver}-sahara-plugin-vanilla
+%endif
+
 %description api
 %{common_desc}
 

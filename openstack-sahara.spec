@@ -294,7 +294,7 @@ Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 # each plugin package "supplements" openstack-sahara-engine and
 # it is magically installed with openstack-sahara-engine
 # (but it can be removed later).
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 && 0%{?repo_bootstrap} == 0
 Requires:         python%{pyver}-sahara-plugin-ambari
 Requires:         python%{pyver}-sahara-plugin-cdh
 Requires:         python%{pyver}-sahara-plugin-mapr
@@ -332,7 +332,7 @@ Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 # each plugin package "supplements" openstack-sahara-api and
 # it is magically installed with openstack-sahara-api
 # (but it can be removed later).
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 && 0%{?repo_bootstrap} == 0
 Requires:         python%{pyver}-sahara-plugin-ambari
 Requires:         python%{pyver}-sahara-plugin-cdh
 Requires:         python%{pyver}-sahara-plugin-mapr

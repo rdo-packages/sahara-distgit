@@ -12,7 +12,6 @@
 # End of macros for py2/py3 compatibility
 # Globals Declaration
 
-%global repo_bootstrap 1
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 

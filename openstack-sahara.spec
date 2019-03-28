@@ -1,4 +1,4 @@
-%global milestone .0rc1
+%global milestone .1rc1
 # Macros for py2/py3 compatibility
 %if 0%{?fedora} || 0%{?rhel} > 7
 %global pyver %{python3_pkgversion}
@@ -12,7 +12,6 @@
 # End of macros for py2/py3 compatibility
 # Globals Declaration
 
-%global repo_bootstrap 1
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
@@ -467,6 +466,8 @@ export PYTHONPATH=$PWD
 stestr-%{pyver} run
 
 %changelog
+* Thu Mar 28 2019 Luigi Toscano <ltoscano@redhat.com> 1:10.0.0-0.1.1rc1
+- Undefine repo_bootstrap now that plugins are available
+
 * Fri Mar 22 2019 RDO <dev@lists.rdoproject.org> 1:10.0.0-0.1.0rc1
 - Update to 10.0.0.0rc1
-

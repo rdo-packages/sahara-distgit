@@ -1,4 +1,3 @@
-%global milestone .0rc1
 # Macros for py2/py3 compatibility
 %if 0%{?fedora} || 0%{?rhel} > 7
 %global pyver %{python3_pkgversion}
@@ -34,14 +33,12 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       10.0.0
-Release:       0.2%{?milestone}%{?dist}
+Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
-#
-# patches_base=10.0.0.0rc1
 #
 
 Source1:       sahara.logrotate
@@ -466,6 +463,9 @@ export PYTHONPATH=$PWD
 stestr-%{pyver} run
 
 %changelog
+* Wed Apr 10 2019 RDO <dev@lists.rdoproject.org> 1:10.0.0-1
+- Update to 10.0.0
+
 * Thu Mar 28 2019 Luigi Toscano <ltoscano@redhat.com> 1:10.0.0-0.2.0rc1
 - Undefine repo_bootstrap now that plugins are available
 

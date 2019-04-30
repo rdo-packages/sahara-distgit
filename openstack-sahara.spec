@@ -371,6 +371,20 @@ Requires:         python-libguestfs
 Requires:         python%{pyver}-libguestfs
 %endif
 
+# When weak dependencies are not available, enforce the dependencies
+# on the plugins; when the weak dependencies are available,
+# each plugin package "supplements" openstack-sahara-image-pack and
+# it is magically installed with openstack-sahara-image-pack
+# (but it can be removed later).
+%if 0%{?rhel} && 0%{?rhel} <= 7 && 0%{?repo_bootstrap} == 0
+Requires:         python%{pyver}-sahara-plugin-ambari
+Requires:         python%{pyver}-sahara-plugin-cdh
+Requires:         python%{pyver}-sahara-plugin-mapr
+Requires:         python%{pyver}-sahara-plugin-spark
+Requires:         python%{pyver}-sahara-plugin-storm
+Requires:         python%{pyver}-sahara-plugin-vanilla
+%endif
+
 %description image-pack
 %{common_desc}
 

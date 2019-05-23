@@ -472,6 +472,7 @@ install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 rm sahara/tests/unit/utils/test_hacking.py
 export PATH=$PATH:$RPM_BUILD_ROOT/usr/bin
 export PYTHONPATH=$PWD
+export PYTHON=%{pyver_bin}
 stestr-%{pyver} run
 
 %changelog

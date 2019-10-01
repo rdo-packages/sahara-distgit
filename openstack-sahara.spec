@@ -12,8 +12,6 @@
 # End of macros for py2/py3 compatibility
 # Globals Declaration
 
-%global repo_bootstrap 1
-
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
@@ -36,7 +34,7 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       11.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       0.2%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -483,6 +481,8 @@ export PYTHON=%{pyver_bin}
 stestr-%{pyver} run
 
 %changelog
+* Tue Oct 01 2019 Luigi Toscano <ltoscano@redhat.com> 1:11.0.0-0.2.0rc1
+- Undefine repo_bootstrap now that plugins are available
+
 * Mon Sep 30 2019 RDO <dev@lists.rdoproject.org> 1:11.0.0-0.1.0rc1
 - Update to 11.0.0.0rc1
-

@@ -396,3 +396,4 @@ export DISCOVER_DIRECTORY=sahara/tests/unit
 * Thu Feb 15 2018 RDO <dev@lists.rdoproject.org> 1:8.0.0-0.1.0rc1
 - Update to 8.0.0.0rc1
 
+# REMOVEME: error caused by commit http://git.openstack.org/cgit/openstack/sahara/commit/?id=ca9345d0358995f28ee0e94375b349b665d66e75

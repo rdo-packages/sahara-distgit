@@ -1,0 +1,8 @@
+Code-Review+2: Luigi Toscano <ltoscano@redhat.com>
+Workflow+1: Luigi Toscano <ltoscano@redhat.com>
+Verified+2: Zuul CI <zuul@review.rdoproject.org>
+Submitted-by: Zuul CI <zuul@review.rdoproject.org>
+Submitted-at: Wed, 29 Jan 2020 22:29:36 +0000
+Reviewed-on: https://review.rdoproject.org/r/24739
+Project: openstack/sahara-distgit
+Branch: refs/heads/rocky-rdo

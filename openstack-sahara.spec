@@ -154,7 +154,7 @@ This package contains the Sahara Python library.
 %doc README.rst
 %license LICENSE
 %{python3_sitelib}/sahara
-%{python3_sitelib}/sahara-%{upstream_version}-py?.?.egg-info
+%{python3_sitelib}/sahara-%{upstream_version}-py%{python3_version}.egg-info
 %exclude %{python3_sitelib}/%{service}/tests
 
 

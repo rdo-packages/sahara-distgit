@@ -1,4 +1,5 @@
-%global milestone .0rc1
+%{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
+%global sources_gpg_sign 0x2426b928085a020d8a90d0d879ab7008d0896c8a
 # Globals Declaration
 
 %global service sahara
@@ -23,20 +24,28 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       13.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       1%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
 URL:           https://launchpad.net/sahara
 Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 #
-# patches_base=13.0.0.0rc1
-#
 
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-api.service
 Source3:       openstack-sahara-engine.service
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+Source101:        https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz.asc
+Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
+%endif
 BuildArch:     noarch
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+BuildRequires:  /usr/bin/gpgv2
+%endif
 
 BuildRequires:    git
 BuildRequires:    python3-devel
@@ -317,6 +326,10 @@ This package contains the sahara-image-pack program.
 
 
 %prep
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
+%endif
 %autosetup -n sahara-%{upstream_version} -S git
 
 # let RPM handle deps
@@ -396,6 +409,10 @@ export PYTHON=%{__python3}
 stestr run
 
 %changelog
+* Wed Oct 14 2020 RDO <dev@lists.rdoproject.org> 1:13.0.0-1
+- Update to 13.0.0
+- Implement sources verification using upstream gpg signature
+
 * Wed Sep 23 2020 RDO <dev@lists.rdoproject.org> 1:13.0.0-0.1.0rc1
 - Update to 13.0.0.0rc1
 

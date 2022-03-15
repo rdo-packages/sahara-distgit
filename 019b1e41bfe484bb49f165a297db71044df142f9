@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05356fe2_10fe4ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 635
+      },
+      "writtenOn": "2022-03-15T18:19:18Z",
+      "side": 1,
+      "message": "https://storyboard.openstack.org/#!/story/2009921",
+      "revId": "019b1e41bfe484bb49f165a297db71044df142f9",
+      "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
+    }
+  ]
+}

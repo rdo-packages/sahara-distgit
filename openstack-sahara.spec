@@ -147,7 +147,6 @@ Requires:         python3-oslo-utils >= 4.5.0
 Requires:         python3-paramiko >= 2.7.1
 Requires:         python3-pbr >= 2.0.0
 Requires:         python3-requests >= 2.23.0
-Requires:         python3-six >= 1.14.0
 Requires:         python3-sqlalchemy >= 1.0.10
 Requires:         python3-stevedore >= 1.20.0
 Requires:         python3-swiftclient >= 3.2.0

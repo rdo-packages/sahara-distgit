@@ -407,3 +407,4 @@ export PYTHON=%{__python3}
 stestr run
 
 %changelog
+# REMOVEME: error caused by commit https://opendev.org/openstack/sahara/commit/68f91a8d579ef4a883a272ce7bce6b403afcf32c

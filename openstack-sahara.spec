@@ -1,4 +1,4 @@
-%global milestone .0rc1
+%global milestone .0rc2
 %{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
 %global sources_gpg_sign 0x01527a34f0d0080f8a5db8d6eb6c5df21b4b6363
 # Globals Declaration
@@ -25,7 +25,7 @@ Name:          openstack-sahara
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:         1
 Version:       16.0.0
-Release:       0.1%{?milestone}%{?dist}
+Release:       0.2%{?milestone}%{?dist}
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
 License:       ASL 2.0
@@ -38,9 +38,7 @@ Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_v
 Patch0001:     0001-Fix-compatibility-with-oslo-context.patch
 %endif
 
-#
-# patches_base=16.0.0.0rc1
-#
+# patches_base=16.0.0.0rc2
 
 Source1:       sahara.logrotate
 Source2:       openstack-sahara-api.service
@@ -418,6 +416,9 @@ export PYTHON=%{__python3}
 stestr run
 
 %changelog
+* Tue Mar 29 2022 RDO <dev@lists.rdoproject.org> 1:16.0.0-0.2.0rc1
+- Update to 16.0.0.0rc2
+
 * Thu Mar 24 2022 RDO <dev@lists.rdoproject.org> 1:16.0.0-0.1.0rc1
 - Update to 16.0.0.0rc1
 

@@ -16,6 +16,24 @@
       "message": "wasn\u0027t flask bumped to 2.1.2 recently in sahara?",
       "revId": "11511b3e6bbf74f38cc7609d0ef1dcec5b8c4e62",
       "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb46a80_f1a0bc20",
+        "filename": "openstack-sahara.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 635
+      },
+      "writtenOn": "2022-09-13T08:08:54Z",
+      "side": 1,
+      "message": "Yes but we don\u0027t have it packaged yet in our deps repo, I have a TODO to handle it after the release.",
+      "parentUuid": "47d8b4b8_32b28d2a",
+      "revId": "11511b3e6bbf74f38cc7609d0ef1dcec5b8c4e62",
+      "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
     }
   ]
 }

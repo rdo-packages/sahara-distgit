@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47d8b4b8_32b28d2a",
+        "filename": "openstack-sahara.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 141
+      },
+      "writtenOn": "2022-09-13T07:58:10Z",
+      "side": 1,
+      "message": "wasn\u0027t flask bumped to 2.1.2 recently in sahara?",
+      "revId": "11511b3e6bbf74f38cc7609d0ef1dcec5b8c4e62",
+      "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
+    }
+  ]
+}

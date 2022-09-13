@@ -48,7 +48,7 @@ BuildRequires:  /usr/bin/gpgv2
 BuildRequires:    git-core
 BuildRequires:    python3-devel
 BuildRequires:    python3-setuptools
-BuildRequires:    python3-pbr >= 2.0.0
+BuildRequires:    python3-pbr >= 3.1.1
 BuildRequires:    systemd
 BuildRequires:    python3-tooz >= 1.58.0
 BuildRequires:    openstack-macros
@@ -79,11 +79,11 @@ BuildRequires:    python3-neutronclient >= 6.7.0
 BuildRequires:    python3-novaclient >= 9.1.0
 BuildRequires:    python3-oslo-concurrency >= 3.26.0
 BuildRequires:    python3-oslo-db >= 4.27.0
-BuildRequires:    python3-oslo-i18n >= 3.15.3
-BuildRequires:    python3-oslo-log >= 3.36.0
+BuildRequires:    python3-oslo-i18n >= 3.20.0
+BuildRequires:    python3-oslo-log >= 5.0.0
 BuildRequires:    python3-oslo-messaging >= 5.29.0
 BuildRequires:    python3-oslo-policy >= 1.30.0
-BuildRequires:    python3-oslo-serialization >= 2.18.0
+BuildRequires:    python3-oslo-serialization >= 2.25.0
 BuildRequires:    python3-oslo-upgradecheck >= 0.1.0
 BuildRequires:    python3-swiftclient >= 3.2.0
 BuildRequires:    python3-oslo-utils >= 3.33.0
@@ -94,7 +94,7 @@ BuildRequires:    /usr/bin/pathfix.py
 BuildRequires:    python3-zmq
 %endif
 BuildRequires:    python3-redis
-BuildRequires:    python3-flask >= 1:1.0.2
+BuildRequires:    python3-flask >= 2.0.1
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
@@ -134,18 +134,18 @@ Requires:         python3-oslo-concurrency >= 3.26.0
 Requires:         python3-oslo-config >= 2:6.8.0
 Requires:         python3-oslo-context >= 2.22.0
 Requires:         python3-oslo-db >= 6.0.0
-Requires:         python3-oslo-i18n >= 3.15.3
-Requires:         python3-oslo-log >= 3.36.0
+Requires:         python3-oslo-i18n >= 3.20.0
+Requires:         python3-oslo-log >= 5.0.0
 Requires:         python3-oslo-messaging >= 10.2.0
 Requires:         python3-oslo-middleware >= 3.31.0
 Requires:         python3-oslo-policy >= 3.6.0
 Requires:         python3-oslo-rootwrap >= 5.8.0
-Requires:         python3-oslo-serialization >= 2.18.0
+Requires:         python3-oslo-serialization >= 2.25.0
 Requires:         python3-oslo-service >= 1.31.0
 Requires:         python3-oslo-upgradecheck >= 1.3.0
 Requires:         python3-oslo-utils >= 4.5.0
 Requires:         python3-paramiko >= 2.7.1
-Requires:         python3-pbr >= 2.0.0
+Requires:         python3-pbr >= 3.1.1
 Requires:         python3-requests >= 2.23.0
 Requires:         python3-sqlalchemy >= 1.0.10
 Requires:         python3-stevedore >= 1.20.0
@@ -153,7 +153,7 @@ Requires:         python3-swiftclient >= 3.2.0
 Requires:         python3-tooz >= 1.58.0
 Requires:         python3-webob >= 1.7.1
 Requires:         /usr/bin/ssh-keygen
-Requires:         python3-flask >= 1:1.0.2
+Requires:         python3-flask >= 2.0.1
 Requires:         python3-libguestfs
 
 %description -n python3-sahara

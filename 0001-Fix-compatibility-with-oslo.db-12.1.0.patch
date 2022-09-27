@@ -1,0 +1,39 @@
+From d2257f8ff56327609625db13338600ca746734ce Mon Sep 17 00:00:00 2001
+From: Alfredo Moralejo <amoralej@redhat.com>
+Date: Fri, 16 Sep 2022 11:03:33 +0200
+Subject: [PATCH] Fix compatibility with oslo.db 12.1.0
+
+oslo.db 12.1.0 has changed the default value for the 'autocommit'
+parameter of 'LegacyEngineFacade' from 'True' to 'False'. This is a
+necessary step to ensure compatibility with SQLAlchemy 2.0. However, we
+are currently relying on the autocommit behavior and need changes to
+explicitly manage sessions. Until that happens, we need to override the
+default.
+
+Co-Authored-By: Stephen Finucane <stephenfin@redhat.com>
+Change-Id: I5dda36e43caeeb2983cb6a9e0743591fc246d323
+---
+ sahara/db/sqlalchemy/api.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/sahara/db/sqlalchemy/api.py b/sahara/db/sqlalchemy/api.py
+index 2d4cd46f..979c5424 100644
+--- a/sahara/db/sqlalchemy/api.py
++++ b/sahara/db/sqlalchemy/api.py
+@@ -48,8 +48,12 @@ def _create_facade_lazily():
+     if _FACADE is None:
+         with _LOCK:
+             if _FACADE is None:
++                # FIXME(amoralej): Remove autocommit=True (and ideally use of
++                # LegacyEngineFacade) asap since it's not compatible with
++                # SQLAlchemy 2.0.
+                 _FACADE = db_session.EngineFacade.from_config(CONF,
+-                                                              sqlite_fk=True)
++                                                              sqlite_fk=True,
++                                                              autocommit=True)
+     return _FACADE
+ 
+ 
+-- 
+2.37.3
+

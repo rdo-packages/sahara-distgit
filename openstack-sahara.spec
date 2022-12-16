@@ -38,7 +38,6 @@ Source3:       openstack-sahara-engine.service
 Source101:        https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz.asc
 Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
 %endif
-Patch0001:     0001-Fix-compatibility-with-oslo.db-12.1.0.patch
 BuildArch:     noarch
 
 # Required for tarball sources verification

@@ -94,7 +94,7 @@ BuildRequires:    /usr/bin/pathfix.py
 BuildRequires:    python3-zmq
 %endif
 BuildRequires:    python3-redis
-BuildRequires:    python3-flask >= 2.0.1
+BuildRequires:    python3-flask >= 2.1.2
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}

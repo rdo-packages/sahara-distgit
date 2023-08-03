@@ -4,16 +4,18 @@
 
 %global service sahara
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
+# we are excluding some BRs from automatic generator
+%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order bashate whereto os-api-ref pylint
+# Exclude sphinx from BRs if docs are disabled
+%if ! 0%{?with_doc}
+%global excluded_brs %{excluded_brs} sphinx openstackdocstheme
+%endif
 
 %global sahara_user sahara
 %global sahara_group %{sahara_user}
 %global with_doc 1
 # guard for packages OSP does not ship
 %global rhosp 0
-
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
-%endif
 
 %global common_desc \
 Sahara provides the ability to elastically manage Apache Hadoop clusters on \
@@ -27,7 +29,7 @@ Version:       XXX
 Release:       XXX
 Provides:      openstack-savanna
 Summary:       Apache Hadoop cluster management on OpenStack
-License:       ASL 2.0
+License:       Apache-2.0
 URL:           https://launchpad.net/sahara
 Source0:       https://tarballs.openstack.org/%{service}/%{service}-%{upstream_version}.tar.gz
 Source1:       sahara.logrotate
@@ -47,54 +49,10 @@ BuildRequires:  /usr/bin/gpgv2
 
 BuildRequires:    git-core
 BuildRequires:    python3-devel
-BuildRequires:    python3-setuptools
-BuildRequires:    python3-pbr >= 3.1.1
+BuildRequires:    pyproject-rpm-macros
 BuildRequires:    systemd
-BuildRequires:    python3-tooz >= 1.58.0
 BuildRequires:    openstack-macros
-BuildRequires:    python3-glanceclient
-
-# config generator
-BuildRequires:    python3-oslo-config >= 2:6.8.0
-BuildRequires:    python3-castellan >= 0.16.0
-
-# test requirements
-# python2-testresources still required by oslo.db tests
-BuildRequires:    python3-testresources
-BuildRequires:    python3-stestr >= 1.0.0
-BuildRequires:    python3-testscenarios
-BuildRequires:    python3-oslotest
-BuildRequires:    python3-hacking
-BuildRequires:    python3-alembic
-BuildRequires:    python3-botocore >= 1.5.1
-BuildRequires:    python3-cinderclient >= 3.3.0
-BuildRequires:    python3-heatclient >= 1.10.0
-BuildRequires:    python3-jsonschema >= 2.6.0
-BuildRequires:    python3-keystoneclient >= 1:3.8.0
-BuildRequires:    python3-keystonemiddleware >= 4.17.0
-BuildRequires:    python3-paramiko >= 2.0.0
-BuildRequires:    python3-manilaclient >= 1.16.0
-BuildRequires:    python3-microversion-parse >= 0.2.1
-BuildRequires:    python3-neutronclient >= 6.7.0
-BuildRequires:    python3-novaclient >= 9.1.0
-BuildRequires:    python3-oslo-concurrency >= 3.26.0
-BuildRequires:    python3-oslo-db >= 4.27.0
-BuildRequires:    python3-oslo-i18n >= 3.20.0
-BuildRequires:    python3-oslo-log >= 5.0.0
-BuildRequires:    python3-oslo-messaging >= 5.29.0
-BuildRequires:    python3-oslo-policy >= 1.30.0
-BuildRequires:    python3-oslo-serialization >= 2.25.0
-BuildRequires:    python3-oslo-upgradecheck >= 0.1.0
-BuildRequires:    python3-swiftclient >= 3.2.0
-BuildRequires:    python3-oslo-utils >= 3.33.0
-BuildRequires:    python3-routes
 BuildRequires:    /usr/bin/ssh-keygen
-BuildRequires:    /usr/bin/pathfix.py
-%if 0%{rhosp} == 0
-BuildRequires:    python3-zmq
-%endif
-BuildRequires:    python3-redis
-BuildRequires:    python3-flask >= 2.1.2
 
 Requires:         openstack-sahara-common = %{epoch}:%{version}-%{release}
 Requires:         openstack-sahara-engine = %{epoch}:%{version}-%{release}
@@ -111,50 +69,8 @@ Requires:         openstack-sahara-image-pack = %{epoch}:%{version}-%{release}
 
 %package -n python3-sahara
 Summary:          Sahara Python libraries
-%{?python_provide:%python_provide python3-sahara}
 
-Requires:         python3-alembic >= 0.9.6
-Requires:         python3-botocore >= 1.5.1
-Requires:         python3-castellan >= 0.16.0
-Requires:         python3-cinderclient >= 3.3.0
-Requires:         python3-eventlet >= 0.26.0
-Requires:         python3-glanceclient >= 2.8.0
-Requires:         python3-heatclient >= 1.10.0
-Requires:         python3-iso8601 >= 0.1.11
-Requires:         python3-jinja2 >= 2.10
-Requires:         python3-jsonschema >= 3.2.0
-Requires:         python3-keystoneauth1 >= 3.4.0
-Requires:         python3-keystoneclient >= 1:3.8.0
-Requires:         python3-keystonemiddleware >= 4.17.0
-Requires:         python3-manilaclient >= 1.16.0
-Requires:         python3-microversion-parse >= 0.2.1
-Requires:         python3-neutronclient >= 6.7.0
-Requires:         python3-novaclient >= 9.1.0
-Requires:         python3-oslo-concurrency >= 3.26.0
-Requires:         python3-oslo-config >= 2:6.8.0
-Requires:         python3-oslo-context >= 2.22.0
-Requires:         python3-oslo-db >= 6.0.0
-Requires:         python3-oslo-i18n >= 3.20.0
-Requires:         python3-oslo-log >= 5.0.0
-Requires:         python3-oslo-messaging >= 10.2.0
-Requires:         python3-oslo-middleware >= 3.31.0
-Requires:         python3-oslo-policy >= 3.6.0
-Requires:         python3-oslo-rootwrap >= 5.8.0
-Requires:         python3-oslo-serialization >= 2.25.0
-Requires:         python3-oslo-service >= 1.31.0
-Requires:         python3-oslo-upgradecheck >= 1.3.0
-Requires:         python3-oslo-utils >= 4.5.0
-Requires:         python3-paramiko >= 2.7.1
-Requires:         python3-pbr >= 3.1.1
-Requires:         python3-requests >= 2.23.0
-Requires:         python3-sqlalchemy >= 1.0.10
-Requires:         python3-stevedore >= 1.20.0
-Requires:         python3-swiftclient >= 3.2.0
-Requires:         python3-tooz >= 1.58.0
-Requires:         python3-webob >= 1.7.1
 Requires:         /usr/bin/ssh-keygen
-Requires:         python3-flask >= 2.0.1
-Requires:         python3-libguestfs
 
 %description -n python3-sahara
 %{common_desc}
@@ -165,13 +81,12 @@ This package contains the Sahara Python library.
 %doc README.rst
 %license LICENSE
 %{python3_sitelib}/sahara
-%{python3_sitelib}/sahara-%{upstream_version}-py%{python3_version}.egg-info
+%{python3_sitelib}/sahara-%{upstream_version}.dist-info
 %exclude %{python3_sitelib}/%{service}/tests
 
 
 %package -n python3-%{service}-tests
 Summary:        Sahara tests
-%{?python_provide:%python_provide python3-%{service}-tests}
 Requires:       openstack-%{service} = %{epoch}:%{version}-%{release}
 
 %description -n python3-%{service}-tests
@@ -188,11 +103,9 @@ This package contains the Sahara test files.
 Summary:          Components common to all Sahara services
 
 Requires:         python3-sahara = %{epoch}:%{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 8
-%{?systemd_requires}
-%else
-%{?systemd_ordering} # does not exist on EL7
-%endif
+
+%{?systemd_ordering}
+
 Requires(pre):    shadow-utils
 
 %description common
@@ -215,7 +128,6 @@ exit 0
 %doc README.rst
 %license LICENSE
 %dir %{_sysconfdir}/sahara
-# Note: this file is not readable because it holds auth credentials
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/sahara.conf
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/rootwrap.conf
 %config(noreplace) %attr(-, root, %{sahara_group}) %{_sysconfdir}/sahara/api-paste.ini
@@ -234,16 +146,10 @@ exit 0
 # Note: permissions on sahara's home are intentionally 0700
 
 %if 0%{?with_doc}
-
-
 %package doc
 Group:         Documentation
 Summary:       Usage documentation for the Sahara cluster management API
 Requires:      openstack-sahara-common = %{epoch}:%{version}-%{release}
-BuildRequires:    python3-sphinx >= 1.6.2
-BuildRequires:    python3-openstackdocstheme >= 1.18.1
-BuildRequires:    python3-sphinxcontrib-httpdomain
-
 
 %description doc
 %{common_desc}
@@ -255,7 +161,6 @@ install, use, and manage the Sahara infrastructure.
 %license LICENSE
 %doc doc/build/html
 %{_mandir}/man1/sahara*.1.gz
-
 %endif
 
 
@@ -329,8 +234,6 @@ This package contains the sahara-image-pack program.
 %endif
 %autosetup -n sahara-%{upstream_version} -S git
 
-# let RPM handle deps
-%py_req_cleanup
 
 # remove the shbang from these files to suppress rpmlint warnings, these are
 # python based scripts that get processed to form the installed shell scripts.
@@ -340,23 +243,46 @@ for file in sahara/cli/*.py; do
     mv $file.new $file
 done
 
+sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
+sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
+sed -i /^minversion.*/d tox.ini
+sed -i /^requires.*virtualenv.*/d tox.ini
+sed -i '/^[\ ]*sphinx-build/{/api-ref/d}' tox.ini
+sed -i '/^[\ ]*whereto/d' tox.ini
+
+# Exclude some bad-known BRs
+for pkg in %{excluded_brs}; do
+  for reqfile in doc/requirements.txt test-requirements.txt; do
+    if [ -f $reqfile ]; then
+      sed -i /^${pkg}.*/d $reqfile
+    fi
+  done
+done
+
+# Automatic BR generation
+%generate_buildrequires
+%if 0%{?with_doc}
+  %pyproject_buildrequires -t -e %{default_toxenv},docs
+%else
+  %pyproject_buildrequires -t -e %{default_toxenv}
+%endif
+
 %build
-%{py3_build}
+%pyproject_wheel
 
 
 %if 0%{?with_doc}
-export PYTHONPATH=.
 # Note: json warnings likely resolved w/ pygments 1.5 (not yet in Fedora)
-sphinx-build -W -b html doc/source doc/build/html
+%tox -e docs
 rm -rf doc/build/html/.{doctrees,buildinfo}
 sphinx-build -W -b man doc/source doc/build/man
 %endif
 
-PYTHONPATH=. oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
-sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' etc/sahara/sahara.conf
-
 %install
-%{py3_install}
+%pyproject_install
+
+PYTHONPATH="%{buildroot}/%{python3_sitelib}" oslo-config-generator --config-file=tools/config/config-generator.sahara.conf --output-file=etc/sahara/sahara.conf
+sed -i 's#^\#api_paste_config.*#api_paste_config = /etc/sahara/api-paste.ini#' etc/sahara/sahara.conf
 
 install -p -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/openstack-sahara-api.service
 install -p -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/openstack-sahara-engine.service
@@ -388,10 +314,6 @@ done
 
 mkdir -p -m0755 %{buildroot}/%{_localstatedir}/log/sahara
 
-# Fix ambiguous shebangs
-# NOTE(jpena): once the sahara plugins are removed, this will need to be removed too
-pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{python3_sitelib}/sahara/plugins/
-
 %if 0%{?with_doc}
 mkdir -p %{buildroot}%{_mandir}/man1
 install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
@@ -400,9 +322,6 @@ install -p -D -m 644 doc/build/man/*.1 %{buildroot}%{_mandir}/man1/
 %check
 # Remove hacking tests, we don't need them
 rm sahara/tests/unit/utils/test_hacking.py
-export PATH=$PATH:$RPM_BUILD_ROOT/usr/bin
-export PYTHONPATH=$PWD
-export PYTHON=%{__python3}
-stestr run
+%tox -e %{default_toxenv}
 
 %changelog

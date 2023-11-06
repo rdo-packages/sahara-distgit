@@ -325,3 +325,4 @@ rm sahara/tests/unit/utils/test_hacking.py
 %tox -e %{default_toxenv}
 
 %changelog
+# REMOVEME: error caused by commit https://opendev.org/openstack/sahara/commit/6a43b615c777528851e96002bcb7dec071e57070

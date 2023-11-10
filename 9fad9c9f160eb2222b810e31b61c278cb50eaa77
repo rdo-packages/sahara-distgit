@@ -16,6 +16,24 @@
       "message": "the new unit test added in https://review.opendev.org/c/openstack/sahara/+/896003 is also failing in upstream openstack-tox-py38 job (there is not py39 and py311 is in retry limit)",
       "revId": "9fad9c9f160eb2222b810e31b61c278cb50eaa77",
       "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaea6f95_3d011efa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 635
+      },
+      "writtenOn": "2023-11-10T12:49:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29cb710a_509cbb14",
+      "revId": "9fad9c9f160eb2222b810e31b61c278cb50eaa77",
+      "serverId": "270e2033-b340-4cff-9539-693957ebf0e7"
     }
   ]
 }

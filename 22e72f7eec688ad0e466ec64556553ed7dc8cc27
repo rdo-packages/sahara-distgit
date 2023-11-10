@@ -1,0 +1,9 @@
+Code-Review+2: Joel Capitao <jcapitao@redhat.com>
+Workflow+1: Joel Capitao <jcapitao@redhat.com>
+Verified+2: Zuul CI <zuul@review.rdoproject.org>
+Code-Review+2: Luigi Toscano <ltoscano@redhat.com>
+Submitted-by: Zuul CI <zuul@review.rdoproject.org>
+Submitted-at: Fri, 10 Nov 2023 12:59:49 +0000
+Reviewed-on: https://review.rdoproject.org/r/c/openstack/sahara-distgit/+/50728
+Project: openstack/sahara-distgit
+Branch: refs/heads/rpm-master
